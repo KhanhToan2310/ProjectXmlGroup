@@ -14,19 +14,18 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.Post;
-import com.example.demo.service.PostService;
+import com.example.demo.model.Status;
+import com.example.demo.service.StatusService;
+
 
 @Service
-public class PostImplService implements PostService{
+public class StatusIServicempl implements StatusService{
 
-	private static String XML_FILE_NAME = "posts.xml";
-	
+	private static String XML_FILE_NAME = "status.xml";
 	@Override
-	public List<Post> ReadListPost() {
-		
-		List<Post> listPost = new ArrayList<>();
-		Post post = null;
+	public List<Status> ReadListStatus() {
+		List<Status> listStatus = new ArrayList<>();
+		Status status = null;
 		String tagContent = null;
 
 		File inputFile = new File(XML_FILE_NAME);
@@ -43,9 +42,9 @@ public class PostImplService implements PostService{
 
 					switch (event) {
 					case XMLStreamConstants.START_ELEMENT:
-						if ("post".equals(reader.getLocalName())) {
-							post = new Post();
-							post.setId(reader.getAttributeValue(0));
+						if ("status".equals(reader.getLocalName())) {
+							status = new Status();
+							status.setId(reader.getAttributeValue(0));
 						}
 
 						break;
@@ -56,11 +55,11 @@ public class PostImplService implements PostService{
 
 					case XMLStreamConstants.END_ELEMENT:
 						switch (reader.getLocalName()) {
-						case "post":
-							listPost.add(post);
+						case "status":
+							listStatus.add(status);
 							break;
-						case "title":
-							post.setTitle(tagContent);
+						case "name":
+							status.setName(tagContent);
 							break;
 						}
 						break;
@@ -72,10 +71,7 @@ public class PostImplService implements PostService{
 		} catch (FileNotFoundException | XMLStreamException e) {
 			e.printStackTrace();
 		}
-		return listPost;
-		
+		return listStatus;
 	}
 
-	
-	
 }
