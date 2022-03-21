@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -13,24 +12,21 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.DemoApplication;
-import com.example.demo.model.Role;
-import com.example.demo.service.RoleService;
-
+import com.example.demo.model.Post;
+import com.example.demo.service.PostService;
 
 @Service
-public class RoleImplService implements RoleService {
+public class PostServiceImpl implements PostService{
 
-	private static String XML_FILE_NAME = "roles.xml";
-
+	private static String XML_FILE_NAME = "posts.xml";
+	
 	@Override
-	public List<Role> ReadListRole() {
-
-		List<Role> listRole = new ArrayList<>();
-		Role role = null;
+	public List<Post> ReadListPost() {
+		
+		List<Post> listPost = new ArrayList<>();
+		Post post = null;
 		String tagContent = null;
 
 		File inputFile = new File(XML_FILE_NAME);
@@ -47,9 +43,9 @@ public class RoleImplService implements RoleService {
 
 					switch (event) {
 					case XMLStreamConstants.START_ELEMENT:
-						if ("role".equals(reader.getLocalName())) {
-							role = new Role();
-							role.setId(reader.getAttributeValue(0));
+						if ("post".equals(reader.getLocalName())) {
+							post = new Post();
+							post.setId(reader.getAttributeValue(0));
 						}
 
 						break;
@@ -60,11 +56,11 @@ public class RoleImplService implements RoleService {
 
 					case XMLStreamConstants.END_ELEMENT:
 						switch (reader.getLocalName()) {
-						case "role":
-							listRole.add(role);
+						case "post":
+							listPost.add(post);
 							break;
-						case "name":
-							role.setName(tagContent);
+						case "title":
+							post.setTitle(tagContent);
 							break;
 						}
 						break;
@@ -76,7 +72,10 @@ public class RoleImplService implements RoleService {
 		} catch (FileNotFoundException | XMLStreamException e) {
 			e.printStackTrace();
 		}
-		return listRole;
+		return listPost;
+		
 	}
 
+	
+	
 }

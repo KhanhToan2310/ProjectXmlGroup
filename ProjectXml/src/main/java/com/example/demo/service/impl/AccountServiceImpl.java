@@ -5,6 +5,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.service.AccountService;
 
 @Service
-public class AccountImplService implements AccountService{
+public class AccountServiceImpl implements AccountService{
 
 }

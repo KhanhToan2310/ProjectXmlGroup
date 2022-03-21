@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -12,20 +13,24 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.Status;
-import com.example.demo.service.StatusService;
+import com.example.demo.DemoApplication;
+import com.example.demo.model.Role;
+import com.example.demo.service.RoleService;
 
 
 @Service
-public class StatusImplService implements StatusService{
+public class RoleServiceImpl implements RoleService {
 
-	private static String XML_FILE_NAME = "status.xml";
+	private static String XML_FILE_NAME = "roles.xml";
+
 	@Override
-	public List<Status> ReadListStatus() {
-		List<Status> listStatus = new ArrayList<>();
-		Status status = null;
+	public List<Role> ReadListRole() {
+
+		List<Role> listRole = new ArrayList<>();
+		Role role = null;
 		String tagContent = null;
 
 		File inputFile = new File(XML_FILE_NAME);
@@ -42,9 +47,9 @@ public class StatusImplService implements StatusService{
 
 					switch (event) {
 					case XMLStreamConstants.START_ELEMENT:
-						if ("status".equals(reader.getLocalName())) {
-							status = new Status();
-							status.setId(reader.getAttributeValue(0));
+						if ("role".equals(reader.getLocalName())) {
+							role = new Role();
+							role.setId(reader.getAttributeValue(0));
 						}
 
 						break;
@@ -55,11 +60,11 @@ public class StatusImplService implements StatusService{
 
 					case XMLStreamConstants.END_ELEMENT:
 						switch (reader.getLocalName()) {
-						case "status":
-							listStatus.add(status);
+						case "role":
+							listRole.add(role);
 							break;
 						case "name":
-							status.setName(tagContent);
+							role.setName(tagContent);
 							break;
 						}
 						break;
@@ -71,7 +76,7 @@ public class StatusImplService implements StatusService{
 		} catch (FileNotFoundException | XMLStreamException e) {
 			e.printStackTrace();
 		}
-		return listStatus;
+		return listRole;
 	}
 
 }
