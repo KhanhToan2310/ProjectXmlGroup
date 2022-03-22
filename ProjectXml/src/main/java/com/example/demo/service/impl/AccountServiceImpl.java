@@ -30,11 +30,11 @@ import com.example.demo.model.Account;
 import com.example.demo.service.AccountService;
 
 @Service
-public class AccountImplService implements AccountService {
+public class AccountServiceImpl implements AccountService {
 
 	public static void main(String[] args)
 			throws XMLStreamException, FileNotFoundException, UnsupportedEncodingException {
-		AccountImplService n = new AccountImplService();
+		AccountServiceImpl n = new AccountServiceImpl();
 
 		Account a = new Account();
 		a.setPassword("duc123");

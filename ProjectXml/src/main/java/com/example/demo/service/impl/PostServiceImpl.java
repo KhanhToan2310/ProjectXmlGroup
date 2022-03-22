@@ -32,11 +32,11 @@ import com.example.demo.model.Post;
 import com.example.demo.service.PostService;
 
 @Service
-public class PostImplService implements PostService {
+public class PostServiceImpl implements PostService {
 
 	public static void main(String[] args)
 			throws XMLStreamException, FileNotFoundException, UnsupportedEncodingException {
-		PostImplService n = new PostImplService();
+		PostServiceImpl n = new PostServiceImpl();
 
 		Post p = new Post();
 		p.setId("1");
