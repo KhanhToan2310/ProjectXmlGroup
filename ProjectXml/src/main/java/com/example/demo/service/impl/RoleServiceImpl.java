@@ -22,7 +22,7 @@ import com.example.demo.service.RoleService;
 
 
 @Service
-public class RoleImplService implements RoleService {
+public class RoleServiceImpl implements RoleService {
 
 	private static String XML_FILE_NAME = "roles.xml";
 

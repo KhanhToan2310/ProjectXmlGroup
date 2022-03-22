@@ -19,7 +19,7 @@ import com.example.demo.service.StatusService;
 
 
 @Service
-public class StatusImplService implements StatusService{
+public class StatusIServicempl implements StatusService{
 
 	private static String XML_FILE_NAME = "status.xml";
 	@Override
