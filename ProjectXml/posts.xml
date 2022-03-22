@@ -14,9 +14,9 @@ and open the template in the editor.
         <userid>5</userid>
         <statusid>2</statusid>
         <likes>
-            <userid>4</userid>
-            <userid>5</userid>
-            <userid>6</userid>
+            <userlikeid>4</userlikeid>
+            <userlikeid>5</userlikeid>
+            <userlikeid>6</userlikeid>
         </likes>
         <isdelete>N</isdelete>
         <isvisible>Y</isvisible>
@@ -30,9 +30,9 @@ and open the template in the editor.
         <userid>4</userid>
         <statusid>2</statusid>
         <likes>
-            <userid>4</userid>
-            <userid>5</userid>
-            <userid>6</userid>
+            <userlikeid>4</userlikeid>
+            <userlikeid>5</userlikeid>
+            <userlikeid>6</userlikeid>
         </likes>
         <isdelete>N</isdelete>
         <isvisible>Y</isvisible>
@@ -46,9 +46,9 @@ and open the template in the editor.
         <userid>5</userid>
         <statusid>1</statusid>
         <likes>
-            <userid>4</userid>
-            <userid>5</userid>
-            <userid>6</userid>
+            <userlikeid>4</userlikeid>
+            <userlikeid>5</userlikeid>
+            <userlikeid>6</userlikeid>
         </likes>
         <isdelete>N</isdelete>
         <isvisible>Y</isvisible>
@@ -62,9 +62,9 @@ and open the template in the editor.
         <userid>5</userid>
         <statusid>1</statusid>
         <likes>
-            <userid>4</userid>
-            <userid>5</userid>
-            <userid>6</userid>
+            <userlikeid>4</userlikeid>
+            <userlikeid>5</userlikeid>
+            <userlikeid>6</userlikeid>
         </likes>
         <isdelete>N</isdelete>
         <isvisible>Y</isvisible>
@@ -78,9 +78,9 @@ and open the template in the editor.
         <userid>4</userid>
         <statusid>3</statusid>
         <likes>
-            <userid>4</userid>
-            <userid>5</userid>
-            <userid>6</userid>
+            <userlikeid>4</userlikeid>
+            <userlikeid>5</userlikeid>
+            <userlikeid>6</userlikeid>
         </likes>
         <isdelete>N</isdelete>
         <isvisible>Y</isvisible>
@@ -94,9 +94,9 @@ and open the template in the editor.
         <userid>4</userid>
         <statusid>3</statusid>
         <likes>
-            <userid>4</userid>
-            <userid>5</userid>
-            <userid>6</userid>
+            <userlikeid>4</userlikeid>
+            <userlikeid>5</userlikeid>
+            <userlikeid>6</userlikeid>
         </likes>
         <isdelete>N</isdelete>
         <isvisible>Y</isvisible>
@@ -110,9 +110,9 @@ and open the template in the editor.
         <userid>6</userid>
         <statusid>2</statusid>
         <likes>
-            <userid>4</userid>
-            <userid>5</userid>
-            <userid>6</userid>
+            <userlikeid>4</userlikeid>
+            <userlikeid>5</userlikeid>
+            <userlikeid>6</userlikeid>
         </likes>
         <isdelete>N</isdelete>
         <isvisible>Y</isvisible>
@@ -123,12 +123,12 @@ and open the template in the editor.
         <img>https://cdn.24h.com.vn/upload/1-2022/images/2022-03-20/2-1647742128-157-width660height440.jpg</img>
         <datecreate>20220101011111</datecreate>
         <dateupdate>20220202153000</dateupdate>
-        <userid></userid>
+        <userid>1</userid>
         <statusid>2</statusid>
         <likes>
-            <userid>4</userid>
-            <userid>5</userid>
-            <userid>6</userid>
+            <userlikeid>4</userlikeid>
+            <userlikeid>5</userlikeid>
+            <userlikeid>6</userlikeid>
         </likes>
         <isdelete>N</isdelete>
         <isvisible>Y</isvisible>
