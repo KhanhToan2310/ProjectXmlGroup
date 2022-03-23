@@ -17,7 +17,7 @@
 											<th>Title</th>
 											<th>Date Create</th>
 											<th>Status</th>
-											<th>Isdelete</th>
+											<th>Delete</th>
 											<th>Isvisible</th>
 										</thead>
 										<tbody>
@@ -27,10 +27,11 @@
 												<td th:text="${result.datecreate}"></td>
 												<td th:text="${statusMap[result.statusid]}"></td>
 												<td>
-													<input type="checkbox" th:checked="${result.isdelete} == Y ? true : false" data-toggle="toggle" data-width="100">
+													<button class="form-control">Delete</button>
+<!-- 													<input type="checkbox" th:checked="${result.isdelete} == Y ? true : false" data-toggle="toggle" data-width="100"> -->
  												</td>
 												<td >
-													<input type="checkbox" th:checked="${result.idisvisible} == Y ? true : false" data-toggle="toggle" data-width="100">
+													<input type="checkbox" class="checkbox" onchange="abc(this)" th:id="${result.id}"  th:checked="${result.idisvisible} == Y ? true : false" data-toggle="toggle" data-width="100">
 												</td>
 											</tr>
 										</tbody>
@@ -42,13 +43,62 @@
 					
 				</div>
 			</div>
-	<footer th:replace="fragment :: footer"></footer>
+			<footer th:replace="fragment :: footer"></footer>
 		</div>
 	</div>
 <script type="text/javascript">
 $(document).ready(function() {
 		$('#example').DataTable();
 } );
+$('.checkbox').on('change',function(){
+
+	var valCheckbox = '';
+	if($(this).is(':checked')){
+		valCheckbox = 'Y'
+	}else{
+		valCheckbox = 'N'
+	}
+
+	link = $(this);
+	var id = link.attr("id");
+
+	$.ajax({
+		url: "./updateVisible?id=" + id + "&valCheckbox=" + valCheckbox,
+		method: 'post',
+		async: false,
+		success: function(data){
+			if(data == "N"){
+				$('#checkbox' + id).prop('checked', false);
+			}else{
+				$('#checkbox' + id).prop('checked', true);
+			}
+		}
+	});
+})
+function abc(element){
+	var valCheckbox = '';
+	if($(element).is(':checked')){
+		valCheckbox = 'Y'
+	}else{
+		valCheckbox = 'N'
+	}
+
+	link = $(element);
+	var id = link.attr("id");
+
+	$.ajax({
+		url: "./updateVisible?id=" + id + "&valCheckbox=" + valCheckbox,
+		method: 'post',
+		async: false,
+		success: function(data){
+			if(data == "N"){
+				$('#checkbox' + id).prop('checked', false);
+			}else{
+				$('#checkbox' + id).prop('checked', true);
+			}
+		}
+	});
+}
 </script>
 </body>
 
