@@ -19,16 +19,23 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.demo.model.Account;
+import com.example.demo.model.Post;
 import com.example.demo.model.Role;
+import com.example.demo.model.Status;
 import com.example.demo.service.AccountService;
+import com.example.demo.service.PostService;
 import com.example.demo.service.RoleService;
+import com.example.demo.service.StatusService;
+import com.example.demo.util.DateUtil;
 
 @Controller
 public class AdminController {
@@ -39,14 +46,70 @@ public class AdminController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private PostService postService;
+
+    @Autowired
+    private StatusService statusService;
+
+    /**
+     * select Post List
+     * 
+     * @param model
+     * @return String
+     * @throws Exception
+     */
     @RequestMapping(value = "/selectPostList")
-    public String selectPostList() {
+    public String selectPostList(ModelMap model) throws Exception {
+
+        // select list post
+        try {
+            List<Post> resultList = postService.ReadListPost();
+
+            for (Post post : resultList) {
+                post.setDatecreate(DateUtil.getDateFormat("yyyy-MM-dd"));
+            }
+
+            model.addAttribute("resultList", resultList);
+        } catch (FileNotFoundException | UnsupportedEncodingException | XMLStreamException e) {
+            throw new Exception("Lỗi");
+        }
+
+        model.addAttribute("statusMap", selectStatusMap());
         return "ADMIN/examples/postList";
+    }
+
+    /**
+     * update Visible
+     * 
+     * @param id
+     * @return String
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateVisible")
+    public String updateVisible(@RequestParam String id, @RequestParam String valCheckbox)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+        List<Post> resultList = postService.ReadListPost();
+        Post temp = new Post();
+
+        for (Post post : resultList) {
+            if (id.equals(post.getId())) {
+                temp = post;
+                temp.setIdisvisible(valCheckbox);
+                postService.UpdatePosts(temp);
+            }
+        }
+
+        return valCheckbox;
     }
 
     // selectAccountView
     @RequestMapping("/selectAccountList")
-    public String selectAccountList(Model model)
+    public String selectAccountList(ModelMap model)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
         Map<String, String> selectRoleMap = selectRoleMap();
@@ -128,4 +191,15 @@ public class AdminController {
 		return "redirect:/selectAccountList";
 
 	}
+
+    private Map<String, String> selectStatusMap() {
+        Map<String, String> map = new HashMap<String, String>();
+        List<Status> statusList = statusService.ReadListStatus();
+
+        for (Status status : statusList) {
+            map.put(status.getId(), status.getName());
+        }
+
+        return map;
+    }
 }

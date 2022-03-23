@@ -1,5 +1,105 @@
-<head  th:replace="fragment :: header_link('Admin - Post List')"/>
-<body>
-<h1>abc</h1>
+<head	th:replace="fragment :: header_link('Admin - Post List')"/>
+	
+<body class="">
+	<div class="wrapper ">
+		<div th:replace="navigation :: menu"></div>
+		<div class="main-panel">
+			<div th:replace="navigation :: nav_header"></div>
+			<div class="content">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="table-responsive">
+									<table id="example" class="table">
+										<thead class=" text-primary">
+											<th>NO.</th>
+											<th>Title</th>
+											<th>Date Create</th>
+											<th>Status</th>
+											<th>Delete</th>
+											<th>Isvisible</th>
+										</thead>
+										<tbody>
+											<tr th:each="result,state : ${resultList}">
+												<td th:text="${state.index + 1}"></td>
+												<td><a href="#" th:text="${result.title}" style="color: black;"></a></td>
+												<td th:text="${result.datecreate}"></td>
+												<td th:text="${statusMap[result.statusid]}"></td>
+												<td>
+													<button class="form-control">Delete</button>
+<!-- 													<input type="checkbox" th:checked="${result.isdelete} == Y ? true : false" data-toggle="toggle" data-width="100"> -->
+ 												</td>
+												<td >
+													<input type="checkbox" class="checkbox" onchange="abc(this)" th:id="${result.id}"  th:checked="${result.idisvisible} == Y ? true : false" data-toggle="toggle" data-width="100">
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<footer th:replace="fragment :: footer"></footer>
+		</div>
+	</div>
+<script type="text/javascript">
+$(document).ready(function() {
+		$('#example').DataTable();
+} );
+$('.checkbox').on('change',function(){
+
+	var valCheckbox = '';
+	if($(this).is(':checked')){
+		valCheckbox = 'Y'
+	}else{
+		valCheckbox = 'N'
+	}
+
+	link = $(this);
+	var id = link.attr("id");
+
+	$.ajax({
+		url: "./updateVisible?id=" + id + "&valCheckbox=" + valCheckbox,
+		method: 'post',
+		async: false,
+		success: function(data){
+			if(data == "N"){
+				$('#checkbox' + id).prop('checked', false);
+			}else{
+				$('#checkbox' + id).prop('checked', true);
+			}
+		}
+	});
+})
+function abc(element){
+	var valCheckbox = '';
+	if($(element).is(':checked')){
+		valCheckbox = 'Y'
+	}else{
+		valCheckbox = 'N'
+	}
+
+	link = $(element);
+	var id = link.attr("id");
+
+	$.ajax({
+		url: "./updateVisible?id=" + id + "&valCheckbox=" + valCheckbox,
+		method: 'post',
+		async: false,
+		success: function(data){
+			if(data == "N"){
+				$('#checkbox' + id).prop('checked', false);
+			}else{
+				$('#checkbox' + id).prop('checked', true);
+			}
+		}
+	});
+}
+</script>
 </body>
+
 </html>
