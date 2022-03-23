@@ -80,17 +80,19 @@ public class AdminController {
     }
 
     /**
-     * update Visible
+     * update Post
      * 
      * @param id
-     * @return String
+     * @param valCheckbox
+     * @param value
+     * @return
      * @throws FileNotFoundException
      * @throws UnsupportedEncodingException
      * @throws XMLStreamException
      */
     @ResponseBody
-    @RequestMapping(value = "/updateVisible")
-    public String updateVisible(@RequestParam String id, @RequestParam String valCheckbox)
+    @RequestMapping(value = "/updatePost")
+    public String updatePost(@RequestParam String id, @RequestParam String valCheckbox, @RequestParam String value)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
         List<Post> resultList = postService.ReadListPost();
@@ -99,8 +101,15 @@ public class AdminController {
         for (Post post : resultList) {
             if (id.equals(post.getId())) {
                 temp = post;
-                temp.setIdisvisible(valCheckbox);
+
+                if ("delete".equals(value)) {
+                    temp.setIsdelete(valCheckbox);
+                } else {
+                    temp.setIdisvisible(valCheckbox);
+                }
+
                 postService.UpdatePosts(temp);
+
             }
         }
 
@@ -121,20 +130,20 @@ public class AdminController {
                 list.add(account);
             }
         }
-        
+
         List<Role> listRole = roleService.ReadListRole();
         List<Role> listRole2 = new ArrayList<>();
-        
+
         for (Role role : listRole) {
-			if (!"1".equalsIgnoreCase(role.getId())) {
-				listRole2.add(role);
-			}
-		}
-        
+            if (!"1".equalsIgnoreCase(role.getId())) {
+                listRole2.add(role);
+            }
+        }
+
         model.addAttribute("listRole", listRole2);
         model.addAttribute("listAccount", list);
         model.addAttribute("selectRoleMap", selectRoleMap);
-        
+
         return "ADMIN/examples/tablesAccounts";
     }
 
@@ -148,7 +157,7 @@ public class AdminController {
 
         return map;
     }
-    
+
     @RequestMapping(value = { "/selectAccountList" }, method = RequestMethod.POST)
 	public String updateAccount(ModelMap model, HttpServletRequest request) {
 
