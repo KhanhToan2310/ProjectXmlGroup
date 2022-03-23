@@ -1,76 +1,94 @@
-<head  th:replace="fragment :: header_link('Admin - Account List')"/>
+<head th:replace="fragment :: header_link('Admin - Account List')" />
 
 <body class="">
-  <div class="wrapper ">
-    <div th:replace="navigation :: menu"></div>
-    <div class="main-panel">
-      <div th:replace="navigation :: nav_header"></div>
-      <div class="content">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h4 class="card-title"> Simple Table</h4>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table id="example" class="table">
-                    <thead class=" text-primary">
-                      <th>
-                        ID
-                      </th>
-                      <th>
-                        Fullname
-                      </th>
-                      <th>
-                        Birthday
-                      </th>
-                      <th>
-                        Email
-                      </th>
-                      <th>
-                        Phone
-                      </th>
-                      <th>
-                        Role
-                      </th>
-                      <th>
-                        Isdelete
-                      </th>
-                      <th>
-                        Isactive
-                      </th>
-                    </thead>
-                    <tbody>
-                      <tr th:each="acc : ${listAccount}">
-                        <td th:text="${acc.id}"></td>
-                        <td th:text="${acc.fullname}"></td>
-                        <td th:text="${acc.birthday}"></td>
-                        <td th:text="${acc.email}"></td>
-                        <td th:text="${acc.phone}"> </td>
-                        <td th:text="${selectRoleMap[acc.role]}"> </td>
-                        <td th:text="${acc.isdelete}"></td>
-                        <td th:text="${acc.isactive}"></td>
-                        <td ></td>
-                      </tr>
-                      
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-	<footer th:replace="fragment :: footer"></footer>
-    </div>
-  </div>
-  <script type="text/javascript">
-  $(document).ready(function() {
-	    $('#example').DataTable();
-	} );
-  </script>
+	<div class="wrapper ">
+		<div th:replace="navigation :: menu"></div>
+		<div class="main-panel">
+			<div th:replace="navigation :: nav_header"></div>
+			<div class="content">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4 class="card-title">Simple Table</h4>
+							</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table id="example" class="table">
+										<thead class=" text-primary">
+											<th>ID</th>
+											<th>Fullname</th>
+											<th>Birthday</th>
+											<th>Email</th>
+											<th>Phone</th>
+											<th>Role</th>
+											<th>Isdelete</th>
+											<th>Isactive</th>
+											<th>Action</th>
+										</thead>
+										<tbody>
+
+											<tr th:each="acc : ${listAccount}">
+												<form name='f' th:action="@{/selectAccountList}"
+													th:object="${accountForm}" method='POST'>
+													<input type="hidden" name="idacc" th:value="${acc.id}">
+												<td th:text="${acc.id}"></td>
+												<td th:text="${acc.fullname}"></td>
+												<td th:text="${acc.birthday}"></td>
+												<td th:text="${acc.email}"></td>
+												<td th:text="${acc.phone}"></td>
+												<!-- <td th:text="${selectRoleMap[acc.role]}"></td> -->
+												
+												<td>
+												<select class="role" name="roleacc">
+															<option th:each="role : ${listRole}"
+																th:value="${role.id}"
+																th:utext="${role.name}"  th:if="${role.name == selectRoleMap[acc.role]}" selected="selected"/>
+													
+													<option th:each="role : ${listRole}"
+																th:value="${role.id}"
+																th:utext="${role.name}"  th:if="${role.name != selectRoleMap[acc.role]}"/>
+																
+													</select>
+													</td>
+												
+												<td><label class="switch"> 
+												<input name="isdelete" type="checkbox" th:if="${acc.isdelete == 'Y'}" checked>
+												<input name="isdelete" type="checkbox" th:if="${acc.isdelete == 'N'}">
+
+														--> <span class="slider round"></span>
+												</label></td>
+
+												<td><label class="switch"> 
+												<input name="isactive" type="checkbox" th:if="${acc.isactive == 'Y'}" checked>
+												<input name="isactive" type="checkbox" th:if="${acc.isactive == 'N'}">
+
+														--> <span class="slider round"></span>
+												</label></td>
+												<td>
+													<button type="submit" value="submit" name="submit"
+														class="btn btn-outline-success">Edit</button>
+												</td>
+												</form>
+											</tr>
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<footer th:replace="fragment :: footer"></footer>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#example').DataTable();
+		});
+	</script>
 </body>
 
 </html>
