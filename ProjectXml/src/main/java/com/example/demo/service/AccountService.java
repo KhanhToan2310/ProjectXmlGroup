@@ -22,4 +22,6 @@ public interface AccountService {
 	
 	void ChangePassUser(String _idUser, String _passNew) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
 	
+	Account findAccount(String _id) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
+	
 }

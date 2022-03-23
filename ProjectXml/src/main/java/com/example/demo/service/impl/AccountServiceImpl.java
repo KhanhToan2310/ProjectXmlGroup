@@ -379,4 +379,20 @@ public class AccountServiceImpl implements AccountService {
 
 	}
 
+	@Override
+	public Account findAccount(String _id)
+			throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
+		
+		List<Account> list = ReadListAccount();
+		Account acc = new Account();
+		
+		for (Account account : list) {
+			if ((account.getId()).equals(_id)) {
+				acc = account;
+			}
+		}
+		
+		return acc;
+	}
+
 }
