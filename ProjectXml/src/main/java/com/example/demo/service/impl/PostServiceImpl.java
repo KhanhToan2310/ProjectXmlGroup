@@ -54,13 +54,13 @@ public class PostServiceImpl implements PostService {
 //		p.setStatusid("1");
 //		p.setTitle("1");
 //		p.setUserid("1");
-//		n.AddNewPosts(p);
+//		n.addNewPosts(p);
 //		
 //		
 //
-////		n.WritePost(n.ReadListPost());
+////		n.writePost(n.readListPost());
 //
-//		List<Post> list = n.ReadListPost();
+//		List<Post> list = n.readListPost();
 //		for (Post post : list) {
 //			System.out.println(post);
 //		}
@@ -70,7 +70,7 @@ public class PostServiceImpl implements PostService {
     private static String XML_FILE_NAME = "posts.xml";
 
     @Override
-    public List<Post> ReadListPost() throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
+    public List<Post> readListPost() throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
 
         FileInputStream fileInPutStream = new FileInputStream(XML_FILE_NAME);
         Reader reader = new java.io.InputStreamReader(fileInPutStream, "utf8");
@@ -188,9 +188,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void UpdatePosts(Post _post) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
+    public void updatePosts(Post _post) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
 
-        List<Post> _listPort = ReadListPost();
+        List<Post> _listPort = readListPost();
 
         for (Post post : _listPort) {
 
@@ -238,7 +238,7 @@ public class PostServiceImpl implements PostService {
 
         }
         // save on file data XML
-        WritePost(_listPort);
+        writePost(_listPort);
 
         for (Post post : _listPort) {
             System.out.println(post);
@@ -247,7 +247,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void WritePost(List<Post> _listPost)
+    public void writePost(List<Post> _listPost)
             throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
 
         FileInputStream fileInPutStream = new FileInputStream(XML_FILE_NAME);
@@ -374,9 +374,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void DeletePosts() throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
+    public void deletePosts() throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
         // read data and save list for use
-        List<Post> _listPost = ReadListPost();
+        List<Post> _listPost = readListPost();
         List<Post> _listPostSave = new ArrayList<>();
 
         // read each post for check isdelete's post if it's "N" add listsave
@@ -386,15 +386,15 @@ public class PostServiceImpl implements PostService {
             }
         }
         // save file data XML
-        WritePost(_listPostSave);
+        writePost(_listPostSave);
 
     }
 
     @Override
-    public void AddNewPosts(Post _post) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
+    public void addNewPosts(Post _post) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
 
         // read data and save list for use
-        List<Post> _listPost = ReadListPost();
+        List<Post> _listPost = readListPost();
 
         // for loop i and read each post for check id same if it's same, i++
         int _i = 1;
@@ -411,8 +411,24 @@ public class PostServiceImpl implements PostService {
         _listPost.add(_post);
 
 //		 save file data XML
-        WritePost(_listPost);
+        writePost(_listPost);
 
+    }
+
+    @Override
+    public Post findPost(String id) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException {
+
+        List<Post> postList = readListPost();
+        Post temp = new Post();
+        for (Post post : postList) {
+
+            if (id.equals(post.getId())) {
+                temp = post;
+            }
+
+        }
+
+        return temp;
     }
 
 }

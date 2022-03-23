@@ -84,7 +84,7 @@
 										<tbody>
 											<tr th:each="result,state : ${resultList}">
 												<td th:text="${state.index + 1}"></td>
-												<td><a href="#" th:text="${result.title}" style="color: black;"></a></td>
+												<td><a th:href="@{'/selectPostView?id='+ ${result.id}}" th:text="${result.title}" style="color: black;"></a></td>
 												<td th:text="${result.datecreate}"></td>
 												<td th:text="${statusMap[result.statusid]}"></td>
 												<td>
