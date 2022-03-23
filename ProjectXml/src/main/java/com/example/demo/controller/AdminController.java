@@ -24,44 +24,45 @@ import com.example.demo.service.RoleService;
 @Controller
 public class AdminController {
 
-	@RequestMapping(value = "/selectPostList")
-	public String selectPostList() {
-		return "ADMIN/examples/postList";
-	}
-	@Autowired
-	private AccountService accountService;
+    @Autowired
+    private AccountService accountService;
 
-	@Autowired
-	private RoleService roleService;
+    @Autowired
+    private RoleService roleService;
 
-	// selectAccountView
-	@RequestMapping("/selectAccountList")
-	public String selectAccountList(Model model)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+    @RequestMapping(value = "/selectPostList")
+    public String selectPostList() {
+        return "ADMIN/examples/postList";
+    }
 
-		Map<String, String> selectRoleMap = selectRoleMap();
-		List<Account> accountList = accountService.ReadListAccount();
-		List<Account> list = new ArrayList<Account>();
-		
-		for (Account account : accountList) {
-			if (!"1".equals(account.getRole())) {
-				list.add(account);
-			}
-		}
-		
-		model.addAttribute("listAccount", list);
-		model.addAttribute("selectRoleMap", selectRoleMap);
-		return "ADMIN/examples/tablesAccounts";
-	}
+    // selectAccountView
+    @RequestMapping("/selectAccountList")
+    public String selectAccountList(Model model)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-	private Map<String, String> selectRoleMap() {
-		Map<String, String> map = new HashMap<String, String>();
-		List<Role> roles = roleService.ReadListRole();
+        Map<String, String> selectRoleMap = selectRoleMap();
+        List<Account> accountList = accountService.ReadListAccount();
+        List<Account> list = new ArrayList<Account>();
 
-		for (Role role : roles) {
-			map.put(role.getId(), role.getName());
-		}
+        for (Account account : accountList) {
+            if (!"1".equals(account.getRole())) {
+                list.add(account);
+            }
+        }
 
-		return map;
-	}
+        model.addAttribute("listAccount", list);
+        model.addAttribute("selectRoleMap", selectRoleMap);
+        return "ADMIN/examples/tablesAccounts";
+    }
+
+    private Map<String, String> selectRoleMap() {
+        Map<String, String> map = new HashMap<String, String>();
+        List<Role> roles = roleService.ReadListRole();
+
+        for (Role role : roles) {
+            map.put(role.getId(), role.getName());
+        }
+
+        return map;
+    }
 }
