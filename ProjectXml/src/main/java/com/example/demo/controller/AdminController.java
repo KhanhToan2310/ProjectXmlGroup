@@ -150,7 +150,7 @@ public class AdminController {
     }
     
     @RequestMapping(value = { "/selectAccountList" }, method = RequestMethod.POST)
-	public String updateAccount(Model model, HttpServletRequest request) {
+	public String updateAccount(ModelMap model, HttpServletRequest request) {
 
 		try {
 			
