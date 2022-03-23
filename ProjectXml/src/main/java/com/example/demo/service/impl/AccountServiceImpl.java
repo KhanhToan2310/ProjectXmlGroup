@@ -32,24 +32,24 @@ import com.example.demo.service.AccountService;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-	public static void main(String[] args)
-			throws XMLStreamException, FileNotFoundException, UnsupportedEncodingException {
-		AccountServiceImpl n = new AccountServiceImpl();
-
-		Account a = new Account();
-		a.setPassword("duc123");
-		a.setId("1");
-//		a.setUsername("alo");
-
-		n.ChangePassUser(a.getId(), a.getPassword());
-
-//		n.AddNewUser(a);
-
-//		List<Account> list = n.ReadListAccount();
-//		for (Account account : list) {
-//			System.out.println(account);
-//		}
-	}
+//	public static void main(String[] args)
+//			throws XMLStreamException, FileNotFoundException, UnsupportedEncodingException {
+//		AccountServiceImpl n = new AccountServiceImpl();
+//
+//		Account a = new Account();
+//		a.setPassword("duc123");
+//		a.setId("1");
+////		a.setUsername("alo");
+//
+//		n.ChangePassUser(a.getId(), a.getPassword());
+//
+////		n.AddNewUser(a);
+//
+////		List<Account> list = n.ReadListAccount();
+////		for (Account account : list) {
+////			System.out.println(account);
+////		}
+//	}
 
 	private static String XML_FILE_NAME = "users.xml";
 
