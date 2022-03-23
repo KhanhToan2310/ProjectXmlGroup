@@ -34,38 +34,38 @@ import com.example.demo.service.PostService;
 @Service
 public class PostServiceImpl implements PostService {
 
-	public static void main(String[] args)
-			throws XMLStreamException, FileNotFoundException, UnsupportedEncodingException {
-		PostServiceImpl n = new PostServiceImpl();
-
-		Post p = new Post();
-		p.setId("1");
-		p.setDatecreate("1");
-		p.setDateupdate("1");
-		p.setDesription("1");
-		p.setIdisvisible("1");
-		p.setImg("1");
-		p.setIsdelete("1");
-		List<String> s = new ArrayList<String>();
-		s.add("1");
-		s.add("2");
-		
-		p.setLikes(s);
-		p.setStatusid("1");
-		p.setTitle("1");
-		p.setUserid("1");
-		n.AddNewPosts(p);
-		
-		
-
-//		n.WritePost(n.ReadListPost());
-
-		List<Post> list = n.ReadListPost();
-		for (Post post : list) {
-			System.out.println(post);
-		}
-
-	}
+//	public static void main(String[] args)
+//			throws XMLStreamException, FileNotFoundException, UnsupportedEncodingException {
+//		PostServiceImpl n = new PostServiceImpl();
+//
+//		Post p = new Post();
+//		p.setId("1");
+//		p.setDatecreate("1");
+//		p.setDateupdate("1");
+//		p.setDesription("1");
+//		p.setIdisvisible("1");
+//		p.setImg("1");
+//		p.setIsdelete("1");
+//		List<String> s = new ArrayList<String>();
+//		s.add("1");
+//		s.add("2");
+//		
+//		p.setLikes(s);
+//		p.setStatusid("1");
+//		p.setTitle("1");
+//		p.setUserid("1");
+//		n.AddNewPosts(p);
+//		
+//		
+//
+////		n.WritePost(n.ReadListPost());
+//
+//		List<Post> list = n.ReadListPost();
+//		for (Post post : list) {
+//			System.out.println(post);
+//		}
+//
+//	}
 
 	private static String XML_FILE_NAME = "posts.xml";
 
