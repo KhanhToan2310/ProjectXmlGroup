@@ -64,7 +64,7 @@ public class AdminController {
 
         // select list post
         try {
-            List<Post> resultList = postService.ReadListPost();
+            List<Post> resultList = postService.readListPost();
 
             for (Post post : resultList) {
                 post.setDatecreate(DateUtil.getDateFormat("yyyy-MM-dd"));
@@ -95,7 +95,7 @@ public class AdminController {
     public String updatePost(@RequestParam String id, @RequestParam String valCheckbox, @RequestParam String value)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-        List<Post> resultList = postService.ReadListPost();
+        List<Post> resultList = postService.readListPost();
         Post temp = new Post();
 
         for (Post post : resultList) {
@@ -108,12 +108,42 @@ public class AdminController {
                     temp.setIdisvisible(valCheckbox);
                 }
 
-                postService.UpdatePosts(temp);
+                postService.updatePosts(temp);
 
             }
         }
 
         return valCheckbox;
+    }
+
+    /**
+     * select Post View
+     * 
+     * @param model
+     * @return String
+     * @throws XMLStreamException
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * @throws Exception
+     */
+    @RequestMapping(value = "/selectPostView")
+    public String selectPostView(ModelMap model, @RequestParam String id)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+        Post post = postService.findPost(id);
+        List<Account> accountList = accountService.ReadListAccount();
+        String userName = "";
+
+        for (Account account : accountList) {
+            if (post.getUserid().equals(account.getId())) {
+                userName = account.getUsername();
+                break;
+            }
+        }
+
+        model.addAttribute("userName", userName);
+        model.addAttribute("post", post);
+        return "ADMIN/examples/postView";
     }
 
     // selectAccountView
