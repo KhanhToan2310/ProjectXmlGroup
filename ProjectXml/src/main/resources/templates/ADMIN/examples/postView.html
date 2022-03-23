@@ -13,7 +13,10 @@
 								<div class="card card-user">
 									<div class="row">
 										<div class="col-lg-5 col-md-5 col-sm-6">
-											<div class="white-box text-center"><img th:src="@{${post.img}}" class="img-responsive"></div>
+											<div class="white-box text-center">
+												<img th:if="${post.img != null}" th:src="@{${post.img}}" class="img-responsive">
+												<img th:if="${post.img == null}" src="images/original.png" class="img-responsive">
+											</div>
 										</div>
 										<div class="col-lg-7 col-md-7 col-sm-6">
 											<h4 class="box-title mt-5">[[${post.title}]]</h4>
@@ -23,12 +26,15 @@
 												Date Create: [[${post.datecreate}]]
 											</h2>
 											<ul class="list-unstyled">
-												<li><i class="fa fa-check text-success"></i>Like: <span th:text="${#lists.size(post.likes)}"/></li>
-												<li><i class="fa fa-check text-success"></i>Designed to foster easy portability</li>
-												<li><i class="fa fa-check text-success"></i>Perfect furniture to flaunt your wonderful collectibles</li>
+												<li><i class="fa fa-check text-success"></i>Likes: <span th:text="${#lists.size(post.likes)}"/></li>
+												<li><i class="fa fa-check text-success"></i>Status Blog: <span th:text="${statusMap[post.statusid]}"/></li>
+												<li><i class="fa fa-check text-success"></i>Is Active: <span th:text="${post.idisvisible} == Y ? Active : Inactive"/></li>
 											</ul>
 										</div>
 									</div>
+								</div>
+								<div class="mr-1" style="text-align: right;">
+									<a th:href="@{'/selectPostList'}" type="submit" class="btn custom-btn form-control mt-4 mb-3" style="width: 20%; border: 1px solid black;"> Back To List </a>
 								</div>
 							</div>
 						</div>

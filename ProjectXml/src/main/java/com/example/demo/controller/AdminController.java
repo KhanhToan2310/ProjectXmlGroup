@@ -141,6 +141,7 @@ public class AdminController {
             }
         }
 
+        model.addAttribute("statusMap", selectStatusMap());
         model.addAttribute("userName", userName);
         model.addAttribute("post", post);
         return "ADMIN/examples/postView";
