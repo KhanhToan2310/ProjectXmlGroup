@@ -145,6 +145,28 @@ public class AdminController {
         model.addAttribute("post", post);
         return "ADMIN/examples/postView";
     }
+    
+    /**
+     * select Account View
+     * 
+     * @param model
+     * @return String
+     * @throws XMLStreamException
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * @throws Exception
+     */
+    @RequestMapping(value = "/selectAccView")
+    public String selectAccountView(ModelMap model, @RequestParam String id)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+        Account account = accountService.findAccount(id);
+        Map<String, String> selectRoleMap = selectRoleMap();
+
+        model.addAttribute("selectRoleMap", selectRoleMap);
+        model.addAttribute("account", account);
+        return "ADMIN/examples/accountView";
+    }
 
     // selectAccountView
     @RequestMapping("/selectAccountList")

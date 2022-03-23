@@ -76,7 +76,7 @@ input:checked+.slider:before {
 								<div class="table-responsive">
 									<table id="example" class="table">
 										<thead class=" text-primary">
-											<th>ID</th>
+											<th>NO.</th>
 											<th>Fullname</th>
 											<th>Birthday</th>
 											<th>Email</th>
@@ -88,9 +88,9 @@ input:checked+.slider:before {
 										</thead>
 										<tbody>
 
-											<tr th:each="acc : ${listAccount}">
-													<input type="hidden" name="idacc" th:value="${acc.id}">
-													<td th:text="${acc.id}"></td>
+											<tr th:each="acc,state : ${listAccount}">
+													
+													<td th:text="${state.index + 1}"></td>
 													<td th:text="${acc.fullname}"></td>
 													<td th:text="${acc.birthday}"></td>
 													<td th:text="${acc.email}"></td>
@@ -125,8 +125,7 @@ input:checked+.slider:before {
 															class="slider round"></span>
 													</label></td>
 													<td>
-														<button type="submit" value="submit" name="submit"
-															class="btn btn-outline-success">Wiew</button>
+														<a th:href="@{'/selectAccView?id='+ ${acc.id}}" >view</a>
 													</td>
 											</tr>
 
