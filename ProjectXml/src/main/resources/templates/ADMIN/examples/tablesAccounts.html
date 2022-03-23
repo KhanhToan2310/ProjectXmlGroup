@@ -84,52 +84,50 @@ input:checked+.slider:before {
 											<th>Role</th>
 											<th>Isdelete</th>
 											<th>Isactive</th>
-											<th>Action</th>
+											<th>Detail</th>
 										</thead>
 										<tbody>
 
 											<tr th:each="acc : ${listAccount}">
-												<form name='f' th:action="@{/selectAccountList}"
-													th:object="${accountForm}" method='POST'>
 													<input type="hidden" name="idacc" th:value="${acc.id}">
-												<td th:text="${acc.id}"></td>
-												<td th:text="${acc.fullname}"></td>
-												<td th:text="${acc.birthday}"></td>
-												<td th:text="${acc.email}"></td>
-												<td th:text="${acc.phone}"></td>
-												<!-- <td th:text="${selectRoleMap[acc.role]}"></td> -->
-												
-												<td>
-												<select class="role" name="roleacc">
+													<td th:text="${acc.id}"></td>
+													<td th:text="${acc.fullname}"></td>
+													<td th:text="${acc.birthday}"></td>
+													<td th:text="${acc.email}"></td>
+													<td th:text="${acc.phone}"></td>
+													<!-- <td th:text="${selectRoleMap[acc.role]}"></td> -->
+
+													<td><select class="role" name="roleacc">
 															<option th:each="role : ${listRole}"
-																th:value="${role.id}"
-																th:utext="${role.name}"  th:if="${role.name == selectRoleMap[acc.role]}" selected="selected"/>
+																th:utext="${role.name}"
+																th:selected="${role.id == acc.role}"
+																onchange="updateData(this)" th:value="role" th:id="${acc.id}"
+																selected="selected" th:type="select" />
+
+															<!-- <option th:each="role : ${listRole}"
+																th:value="${role.id}" th:utext="${role.name}"
+																th:if="${role.name != selectRoleMap[acc.role]}" /> -->
+
+													</select></td>
+
+													<td><label class="switch"> 
+															<input name="isdelete" onchange="updateData(this)" th:value="delete" th:id="${acc.id}" th:type="checkbox" th:checked="${acc.isdelete} == Y ? true : false">
+															 --> <span
+															class="slider round"></span>
+													</label></td>
+
+													<td><label class="switch"> 
 													
-													<option th:each="role : ${listRole}"
-																th:value="${role.id}"
-																th:utext="${role.name}"  th:if="${role.name != selectRoleMap[acc.role]}"/>
-																
-													</select>
+															
+															<input name="isactive" onchange="updateData(this)" th:value="active" th:id="${acc.id}"  th:type="checkbox" th:checked="${acc.isactive} == Y ? true : false">
+															
+															 --> <span
+															class="slider round"></span>
+													</label></td>
+													<td>
+														<button type="submit" value="submit" name="submit"
+															class="btn btn-outline-success">Wiew</button>
 													</td>
-												
-												<td><label class="switch"> 
-												<input name="isdelete" type="checkbox" th:if="${acc.isdelete == 'Y'}" checked>
-												<input name="isdelete" type="checkbox" th:if="${acc.isdelete == 'N'}">
-
-														--> <span class="slider round"></span>
-												</label></td>
-
-												<td><label class="switch"> 
-												<input name="isactive" type="checkbox" th:if="${acc.isactive == 'Y'}" checked>
-												<input name="isactive" type="checkbox" th:if="${acc.isactive == 'N'}">
-
-														--> <span class="slider round"></span>
-												</label></td>
-												<td>
-													<button type="submit" value="submit" name="submit"
-														class="btn btn-outline-success">Edit</button>
-												</td>
-												</form>
 											</tr>
 
 										</tbody>
@@ -147,35 +145,41 @@ input:checked+.slider:before {
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('#example').DataTable();
-		} );
-		
-			function abc(element){
-				
-			var valCheckbox = '';
-			
-			if($(element).is(':checked')){
-				valCheckbox = 'Y'
-			}else{
-				valCheckbox = 'N'
-			}
+		});
 
+		function updateData(element) {
 			link = $(element);
 			var id = link.attr("id");
+			var value = link.attr("value");
+			var type = link.attr("type");
+			
+			var valCheckbox = '';
+			if(type == 'select'){
+				if ($(element).is(':selected')) {
+					valCheckbox = $(element).val()
+				}
+			}else{
+				if ($(element).is(':checked')) {
+					valCheckbox = 'Y'
+				} else {
+					valCheckbox = 'N'
+				}
+			}
 
 			$.ajax({
-				url: "./updateVisible?id=" + id + "&valCheckbox=" + valCheckbox,
-				method: 'post',
-				async: false,
-				success: function(data){
-					if(data == "N"){
+				url : "./updateAccPost?id=" + id + "&valCheckbox=" + valCheckbox
+						+ "&value=" + value,
+				method : 'post',
+				async : false,
+				success : function(data) {
+					if (data == "N") {
 						$('#checkbox' + id).prop('checked', false);
-					}else{
+					} else {
 						$('#checkbox' + id).prop('checked', true);
 					}
 				}
 			});
 		}
-		
 	</script>
 </body>
 

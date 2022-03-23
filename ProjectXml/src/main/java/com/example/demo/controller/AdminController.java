@@ -158,48 +158,90 @@ public class AdminController {
         return map;
     }
 
-    @RequestMapping(value = { "/selectAccountList" }, method = RequestMethod.POST)
-	public String updateAccount(ModelMap model, HttpServletRequest request) {
+//    @RequestMapping(value = { "/selectAccountList" }, method = RequestMethod.POST)
+//	public String updateAccount(ModelMap model, HttpServletRequest request) {
+//
+//		try {
+//			
+//			String idAcc = request.getParameter("idacc");
+//			String isdelete = request.getParameter("isdelete");
+//			String isactive = request.getParameter("isactive");
+//			String role = request.getParameter("roleacc");
+//			
+//			List<Account> listAccount = accountService.ReadListAccount();
+//			Account a = new Account();
+//			for (Account account : listAccount) {
+//				if ((account.getId()).equalsIgnoreCase(idAcc)) {
+//					a = account;
+//					
+//					a.setId(idAcc);
+//				    a.setRole(role);
+//				    if ("on".equalsIgnoreCase(isdelete)) {
+//						a.setIsdelete("Y");
+//					}else {
+//						a.setIsdelete("N");
+//					}
+//				    if ("on".equalsIgnoreCase(isactive)) {
+//						a.setIsactive("Y");
+//					}else {
+//						a.setIsactive("N");
+//					}
+//				    
+//				    
+//				    accountService.UpdateUser(a);
+//				}
+//			}
+//			
+//		    
+//			
+//		} catch (Exception e) {
+//		}
+//    	
+//		return "redirect:/selectAccountList";
+//
+//	}
+    
+    /**
+     * update Account
+     * 
+     * @param id
+     * @param valCheckbox
+     * @param value
+     * @return
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateAccPost")
+    public String updateAccPost(@RequestParam String id, @RequestParam String valCheckbox, @RequestParam String value)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-		try {
-			
-			String idAcc = request.getParameter("idacc");
-			String isdelete = request.getParameter("isdelete");
-			String isactive = request.getParameter("isactive");
-			String role = request.getParameter("roleacc");
-			
-			List<Account> listAccount = accountService.ReadListAccount();
-			Account a = new Account();
-			for (Account account : listAccount) {
-				if ((account.getId()).equalsIgnoreCase(idAcc)) {
-					a = account;
-					
-					a.setId(idAcc);
-				    a.setRole(role);
-				    if ("on".equalsIgnoreCase(isdelete)) {
-						a.setIsdelete("Y");
-					}else {
-						a.setIsdelete("N");
-					}
-				    if ("on".equalsIgnoreCase(isactive)) {
-						a.setIsactive("Y");
-					}else {
-						a.setIsactive("N");
-					}
-				    
-				    
-				    accountService.UpdateUser(a);
+        List<Account> resultList = accountService.ReadListAccount();
+        Account temp = new Account();
+
+        for (Account account : resultList) {
+            if (id.equals(account.getId())) {
+                temp = account;
+
+                if ("delete".equals(value)) {
+                    temp.setIsdelete(valCheckbox);
+                } else {
+                    temp.setIsactive(valCheckbox);
+                }
+                if ("role".equals(value)) {
+					temp.setRole(valCheckbox);
 				}
-			}
-			
-		    
-			
-		} catch (Exception e) {
-		}
-    	
-		return "redirect:/selectAccountList";
 
-	}
+                accountService.UpdateUser(temp);
+                
+                
+
+            }
+        }
+
+        return valCheckbox;
+    }
 
     private Map<String, String> selectStatusMap() {
         Map<String, String> map = new HashMap<String, String>();
