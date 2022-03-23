@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import java.io.Console;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -8,14 +11,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLStreamException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.model.Account;
 import com.example.demo.model.Post;
@@ -111,9 +121,20 @@ public class AdminController {
                 list.add(account);
             }
         }
-
+        
+        List<Role> listRole = roleService.ReadListRole();
+        List<Role> listRole2 = new ArrayList<>();
+        
+        for (Role role : listRole) {
+			if (!"1".equalsIgnoreCase(role.getId())) {
+				listRole2.add(role);
+			}
+		}
+        
+        model.addAttribute("listRole", listRole2);
         model.addAttribute("listAccount", list);
         model.addAttribute("selectRoleMap", selectRoleMap);
+        
         return "ADMIN/examples/tablesAccounts";
     }
 
@@ -127,6 +148,49 @@ public class AdminController {
 
         return map;
     }
+    
+    @RequestMapping(value = { "/selectAccountList" }, method = RequestMethod.POST)
+	public String updateAccount(Model model, HttpServletRequest request) {
+
+		try {
+			
+			String idAcc = request.getParameter("idacc");
+			String isdelete = request.getParameter("isdelete");
+			String isactive = request.getParameter("isactive");
+			String role = request.getParameter("roleacc");
+			
+			List<Account> listAccount = accountService.ReadListAccount();
+			Account a = new Account();
+			for (Account account : listAccount) {
+				if ((account.getId()).equalsIgnoreCase(idAcc)) {
+					a = account;
+					
+					a.setId(idAcc);
+				    a.setRole(role);
+				    if ("on".equalsIgnoreCase(isdelete)) {
+						a.setIsdelete("Y");
+					}else {
+						a.setIsdelete("N");
+					}
+				    if ("on".equalsIgnoreCase(isactive)) {
+						a.setIsactive("Y");
+					}else {
+						a.setIsactive("N");
+					}
+				    
+				    
+				    accountService.UpdateUser(a);
+				}
+			}
+			
+		    
+			
+		} catch (Exception e) {
+		}
+    	
+		return "redirect:/selectAccountList";
+
+	}
 
     private Map<String, String> selectStatusMap() {
         Map<String, String> map = new HashMap<String, String>();

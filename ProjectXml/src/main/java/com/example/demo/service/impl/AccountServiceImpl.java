@@ -37,18 +37,23 @@ public class AccountServiceImpl implements AccountService {
 //		AccountServiceImpl n = new AccountServiceImpl();
 //
 //		Account a = new Account();
-//		a.setPassword("duc123");
+////		a.setPassword("duc123");
+//
+//		a.setIsactive("Y");
+//		a.setIsdelete("Y");
 //		a.setId("1");
+//
+//		n.UpdateUser(a);
 ////		a.setUsername("alo");
 //
-//		n.ChangePassUser(a.getId(), a.getPassword());
+////		n.ChangePassUser(a.getId(), a.getPassword());
 //
 ////		n.AddNewUser(a);
 //
-////		List<Account> list = n.ReadListAccount();
-////		for (Account account : list) {
-////			System.out.println(account);
-////		}
+//		List<Account> list = n.ReadListAccount();
+//		for (Account account : list) {
+//			System.out.println(account);
+//		}
 //	}
 
 	private static String XML_FILE_NAME = "users.xml";
@@ -165,21 +170,23 @@ public class AccountServiceImpl implements AccountService {
 
 			if (_acc.getId().equalsIgnoreCase(account.getId())) {
 
-				account.setFullname(_acc.getFullname());
+					account.setPassword(_acc.getPassword());
+				
+					account.setFullname(_acc.getFullname());
+				
+					account.setBirthday(_acc.getBirthday());
+				
+					account.setAge(_acc.getAge());
+				
+					account.setEmail(_acc.getEmail());
+				
+					account.setPhone(_acc.getPhone());
+				
+					account.setRole(_acc.getRole());
+			
+					account.setIsdelete(_acc.getIsdelete());
 
-				account.setBirthday(_acc.getBirthday());
-
-				account.setAge(_acc.getAge());
-
-				account.setEmail(_acc.getEmail());
-
-				account.setPhone(_acc.getPhone());
-
-				account.setRole(_acc.getRole());
-
-				account.setIsdelete(_acc.getIsdelete());
-
-				account.setIsactive(_acc.getIsactive());
+					account.setIsactive(_acc.getIsactive());
 
 			}
 
@@ -362,7 +369,7 @@ public class AccountServiceImpl implements AccountService {
 			if (_idUser.equalsIgnoreCase(account.getId())) {
 
 				account.setPassword(_passNew);
-			
+
 			}
 
 		}
