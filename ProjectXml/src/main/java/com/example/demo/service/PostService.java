@@ -6,19 +6,20 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import com.example.demo.model.Account;
 import com.example.demo.model.Post;
 
 public interface PostService {
 
-	List<Post> ReadListPost() throws XMLStreamException, FileNotFoundException, UnsupportedEncodingException;
+	List<Post> readListPost() throws XMLStreamException, FileNotFoundException, UnsupportedEncodingException;
 	
-	void UpdatePosts(Post _post) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
+	void updatePosts(Post _post) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
 	
-	void WritePost(List<Post> _listPost) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
+	void writePost(List<Post> _listPost) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
 	
-	void DeletePosts() throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
+	void deletePosts() throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
 	
-	void AddNewPosts(Post _post) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
+	void addNewPosts(Post _post) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
+	
+	Post findPost(String id) throws FileNotFoundException, XMLStreamException, UnsupportedEncodingException;
 	
 }
