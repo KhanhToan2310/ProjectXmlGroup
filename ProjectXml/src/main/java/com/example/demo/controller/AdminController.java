@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.model.Account;
 import com.example.demo.model.Post;
@@ -41,7 +43,7 @@ public class AdminController {
     private StatusService statusService;
 
     /**
-     * selectPostList
+     * select Post List
      * 
      * @param model
      * @return String
@@ -65,6 +67,34 @@ public class AdminController {
 
         model.addAttribute("statusMap", selectStatusMap());
         return "ADMIN/examples/postList";
+    }
+
+    /**
+     * update Visible
+     * 
+     * @param id
+     * @return String
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateVisible")
+    public String updateVisible(@RequestParam String id, @RequestParam String valCheckbox)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+        List<Post> resultList = postService.ReadListPost();
+        Post temp = new Post();
+
+        for (Post post : resultList) {
+            if (id.equals(post.getId())) {
+                temp = post;
+                temp.setIdisvisible(valCheckbox);
+                postService.UpdatePosts(temp);
+            }
+        }
+
+        return valCheckbox;
     }
 
     // selectAccountView
