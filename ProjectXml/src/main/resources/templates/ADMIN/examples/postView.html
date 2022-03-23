@@ -23,9 +23,9 @@
 												Date Create: [[${post.datecreate}]]
 											</h2>
 											<ul class="list-unstyled">
-												<li><i class="fa fa-check text-success"></i>Like: <span th:text="${#lists.size(post.likes)}"/></li>
-												<li><i class="fa fa-check text-success"></i>Designed to foster easy portability</li>
-												<li><i class="fa fa-check text-success"></i>Perfect furniture to flaunt your wonderful collectibles</li>
+												<li><i class="fa fa-check text-success"></i>Likes: <span th:text="${#lists.size(post.likes)}"/></li>
+												<li><i class="fa fa-check text-success"></i>Status Blog: <span th:text="${statusMap[post.statusid]}"/></li>
+												<li><i class="fa fa-check text-success"></i>Is Active: <span th:text="${post.idisvisible} == Y ? Active : Inactive"/></li>
 											</ul>
 										</div>
 									</div>
