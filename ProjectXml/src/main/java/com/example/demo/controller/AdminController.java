@@ -1,31 +1,20 @@
 package com.example.demo.controller;
 
-import java.io.Console;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLStreamException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.model.Account;
 import com.example.demo.model.Post;
@@ -40,15 +29,19 @@ import com.example.demo.util.DateUtil;
 @Controller
 public class AdminController {
 
+    /** accountService */
     @Autowired
     private AccountService accountService;
 
+    /** roleService */
     @Autowired
     private RoleService roleService;
 
+    /** postService */
     @Autowired
     private PostService postService;
 
+    /** statusService */
     @Autowired
     private StatusService statusService;
 
@@ -91,7 +84,7 @@ public class AdminController {
      * @throws XMLStreamException
      */
     @ResponseBody
-    @RequestMapping(value = "/updatePost")
+    @RequestMapping(value = "/updatePostAjax")
     public String updatePost(@RequestParam String id, @RequestParam String valCheckbox, @RequestParam String value)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
@@ -102,10 +95,18 @@ public class AdminController {
             if (id.equals(post.getId())) {
                 temp = post;
 
-                if ("delete".equals(value)) {
+                switch (value) {
+                case "delete":
                     temp.setIsdelete(valCheckbox);
-                } else {
+                    break;
+                case "visible":
                     temp.setIdisvisible(valCheckbox);
+                    break;
+                case "select":
+                    temp.setStatusid(valCheckbox);
+                    break;
+                default:
+                    break;
                 }
 
                 postService.updatePosts(temp);
@@ -141,12 +142,13 @@ public class AdminController {
             }
         }
 
+        model.addAttribute("statusList", statusService.ReadListStatus());
         model.addAttribute("statusMap", selectStatusMap());
         model.addAttribute("userName", userName);
         model.addAttribute("post", post);
         return "ADMIN/examples/postView";
     }
-    
+
     /**
      * select Account View
      * 
@@ -157,7 +159,7 @@ public class AdminController {
      * @throws FileNotFoundException
      * @throws Exception
      */
-    @RequestMapping(value = "/selectAccView")
+    @RequestMapping(value = "/selectAccountView")
     public String selectAccountView(ModelMap model, @RequestParam String id)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
@@ -169,7 +171,15 @@ public class AdminController {
         return "ADMIN/examples/accountView";
     }
 
-    // selectAccountView
+    /**
+     * select Account List
+     * 
+     * @param model
+     * @return String
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
     @RequestMapping("/selectAccountList")
     public String selectAccountList(ModelMap model)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
@@ -197,63 +207,9 @@ public class AdminController {
         model.addAttribute("listAccount", list);
         model.addAttribute("selectRoleMap", selectRoleMap);
 
-        return "ADMIN/examples/tablesAccounts";
+        return "ADMIN/examples/accountList";
     }
 
-    private Map<String, String> selectRoleMap() {
-        Map<String, String> map = new HashMap<String, String>();
-        List<Role> roles = roleService.ReadListRole();
-
-        for (Role role : roles) {
-            map.put(role.getId(), role.getName());
-        }
-
-        return map;
-    }
-
-//    @RequestMapping(value = { "/selectAccountList" }, method = RequestMethod.POST)
-//	public String updateAccount(ModelMap model, HttpServletRequest request) {
-//
-//		try {
-//			
-//			String idAcc = request.getParameter("idacc");
-//			String isdelete = request.getParameter("isdelete");
-//			String isactive = request.getParameter("isactive");
-//			String role = request.getParameter("roleacc");
-//			
-//			List<Account> listAccount = accountService.ReadListAccount();
-//			Account a = new Account();
-//			for (Account account : listAccount) {
-//				if ((account.getId()).equalsIgnoreCase(idAcc)) {
-//					a = account;
-//					
-//					a.setId(idAcc);
-//				    a.setRole(role);
-//				    if ("on".equalsIgnoreCase(isdelete)) {
-//						a.setIsdelete("Y");
-//					}else {
-//						a.setIsdelete("N");
-//					}
-//				    if ("on".equalsIgnoreCase(isactive)) {
-//						a.setIsactive("Y");
-//					}else {
-//						a.setIsactive("N");
-//					}
-//				    
-//				    
-//				    accountService.UpdateUser(a);
-//				}
-//			}
-//			
-//		    
-//			
-//		} catch (Exception e) {
-//		}
-//    	
-//		return "redirect:/selectAccountList";
-//
-//	}
-    
     /**
      * update Account
      * 
@@ -266,7 +222,7 @@ public class AdminController {
      * @throws XMLStreamException
      */
     @ResponseBody
-    @RequestMapping(value = "/updateAccPost")
+    @RequestMapping(value = "/updateAccountPostAjax")
     public String updateAccPost(@RequestParam String id, @RequestParam String valCheckbox, @RequestParam String value)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
@@ -283,12 +239,10 @@ public class AdminController {
                     temp.setIsactive(valCheckbox);
                 }
                 if ("role".equals(value)) {
-					temp.setRole(valCheckbox);
-				}
+                    temp.setRole(valCheckbox);
+                }
 
                 accountService.UpdateUser(temp);
-                
-                
 
             }
         }
@@ -296,6 +250,116 @@ public class AdminController {
         return valCheckbox;
     }
 
+    /**
+     * select Find Account View
+     * 
+     * @param model
+     * @return String
+     * @throws XMLStreamException
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * @throws Exception
+     */
+    @RequestMapping(value = "/updateAccountView")
+    public String selectFindAccountView(ModelMap model, @RequestParam String id)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+        Account account = accountService.findAccount(id);
+        Map<String, String> selectRoleMap = selectRoleMap();
+
+        model.addAttribute("selectRoleMap", selectRoleMap);
+        model.addAttribute("account", account);
+        return "ADMIN/examples/accountForm";
+    }
+
+    /**
+     * update Account Find
+     * 
+     * @param id
+     * @param phone
+     * @param email
+     * @param age
+     * @param birthday
+     * @param fullname
+     * @return null
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateAccountFind")
+    public String updateAccountFind(@RequestParam String id, @RequestParam String phone, @RequestParam String email,
+            @RequestParam String age, @RequestParam String birthday,
+            @RequestParam(name = "fullname", required = false) String fullname)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+        List<Account> resultList = accountService.ReadListAccount();
+
+        for (Account account : resultList) {
+            if (account.getId().equalsIgnoreCase(id)) {
+                account.setAge(age);
+                account.setBirthday(birthday);
+                account.setEmail(email);
+                account.setFullname(fullname);
+                account.setPhone(phone);
+
+                accountService.UpdateUser(account);
+
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * update Account Password
+     * 
+     * @param id
+     * @param phone
+     * @return null
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateAccountPassword")
+    public String updateAccountPassword(@RequestParam String id, @RequestParam String newPassword)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+        List<Account> resultList = accountService.ReadListAccount();
+
+        for (Account account : resultList) {
+            if (account.getId().equalsIgnoreCase(id)) {
+                account.setPassword(newPassword);
+
+                accountService.UpdateUser(account);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * select Role Map
+     * 
+     * @return Map<String, String>
+     */
+    private Map<String, String> selectRoleMap() {
+        Map<String, String> map = new HashMap<String, String>();
+        List<Role> roles = roleService.ReadListRole();
+
+        for (Role role : roles) {
+            map.put(role.getId(), role.getName());
+        }
+
+        return map;
+    }
+
+    /**
+     * select Status Map
+     * 
+     * @return Map<String, String>
+     */
     private Map<String, String> selectStatusMap() {
         Map<String, String> map = new HashMap<String, String>();
         List<Status> statusList = statusService.ReadListStatus();

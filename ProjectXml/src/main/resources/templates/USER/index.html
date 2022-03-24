@@ -1,369 +1,95 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Tooplate's Little Fashion</title>
-
-    <!-- CSS FILES -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&display=swap" rel="stylesheet">
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-icons.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="css/slick.css" />
-
-    <link href="css/tooplate-little-fashion.css" rel="stylesheet">
-    <!--
-
-Tooplate 2127 Little Fashion
-
-https://www.tooplate.com/view/2127-little-fashion
-
--->
-</head>
-
+<head th:replace="fragmentU :: headerU_link('User - HomePage')" />
 <body>
+	<section class="preloader">
+		<div class="spinner">
+			<span class="sk-inner-circle"></span>
+		</div>
+	</section>
 
-    <section class="preloader">
-        <div class="spinner">
-            <span class="sk-inner-circle"></span>
-        </div>
-    </section>
+	<main>
+	
+	<div th:replace="navigationU :: nav_headerU"></div>
 
-    <main>
+		<section class="slick-slideshow">
+		
+			<div class="slick-custom" th:each="postTrend : ${listPostTrend}">
+				<img th:src="${postTrend.img}" src="images\background.jpg" class="img-fluid" alt="">
 
-        <nav class="navbar navbar-expand-lg">
-            <div class="container">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+				<div class="slick-bottom">
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-6 col-10">
+								<h1 th:text="${postTrend.title}" class="slick-title">Blog 1</h1>
 
-                <a class="navbar-brand" href="index.html">
-                    <strong>Blog</strong>
-                </a>
+								<p th:text="${postTrend.desription}" class="lead text-white mt-lg-3 mb-lg-5">Content blog 1111111</p>
 
-                <div class="d-lg-none">
-                    <a href="sign-in.html" class="bi-person custom-icon me-3"></a>
+								<a th:href="@{'/selectPostViewU?id='+ ${postTrend.id}}" href="about.html" class="btn custom-btn">View blog</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-                    <a href="product-detail.html" class="bi-bag custom-icon"></a>
-                </div>
+			
 
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.html">New feed</a>
-                        </li>
+		</section>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="about.html">My Blogs</a>
-                        </li>
+		<section class="about section-padding">
+			<div class="container">
+				<div class="row">
 
-                    </ul>
+					<div class="col-12 text-center">
+						<h2 class="mb-5"><span>List blog</span></h2>
+					</div>
 
-                    <div class="d-none d-lg-block">
-                        <a href="sign-in.html" class="bi-person custom-icon me-3"></a>
+					<div class="col-lg-10 col-12">
+						<div class="tab-content mt-2" id="pills-tabContent">
+							<div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+								aria-labelledby="pills-home-tab">
 
-                        <a href="product-detail.html" class="bi-bag custom-icon"></a>
-                    </div>
-                </div>
-            </div>
-        </nav>
+								<div class="row" th:each="Post : ${listPost}"
+									style="width: 100%; margin-right: 0px !important;margin-left: 0px !important;box-shadow: 6px 6px 18px 4px rgb(0 0 0 / 70%); margin-bottom: 5%;border-radius: 10px;">
+									<div class="col-lg-4 col-12" style="display: flex;
+										align-items: center;">
+										<img th:src="${Post.img}"  src="images\product\image_product.jpg" class="img-fluid" alt="">
+									</div>
 
-        <section class="slick-slideshow">
-            <div class="slick-custom">
-                <img src="images\background.jpg" class="img-fluid" alt="">
+									<div class="col-lg-8 col-12">
+										<div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
+											<h1 style="font-size: 22px;
+												font-weight: 600;" class="mb-3 " th:text="${Post.userid}">Trương Khánh Toàn</h1>
+											<div class="mb-3 date-create">
+												<p>2022/03/22</p>
+											</div>
+											<h4 class="mb-3" th:text="${Post.title}">Toàn mặt lol</h4>
+											<p th:text="${Post.desription}">
+												<br>
+											</p>
+											<div class="mt-2 mt-lg-auto">
+												<a style="" href="#" class="bi-heart-fill product-icon">
+													<p th:text="${#lists.size(Post.likes)}">2000</p>
+												</a>
+												<br>
+												<a th:href="@{'/selectPostViewU?id='+ ${Post.id}}" href="product-detail.html" class="custom-link mb-2">
+													View details
+													<i class="bi-arrow-right ms-2"></i>
+												</a>
+											</div>
+										</div>
+									</div>
 
-                <div class="slick-bottom">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-10">
-                                <h1 class="slick-title">Blog 1</h1>
+								</div>
+		</section>
+	</main>
+	<footer th:replace="fragmentU :: footerU"></footer>
 
-                                <p class="lead text-white mt-lg-3 mb-lg-5">Content blog 1111111</p>
-
-                                <a href="about.html" class="btn custom-btn">View blog</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="slick-custom">
-                <img src="images\background.jpg" class="img-fluid" alt="">
-
-                <div class="slick-bottom">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-10">
-                                <h1 class="slick-title">Blog 2</h1>
-
-                                <p class="lead text-white mt-lg-3 mb-lg-5">Content blog 222222</p>
-
-                                <a href="product.html" class="btn custom-btn">View blog</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="slick-custom">
-                <img src="images\background.jpg" class="img-fluid" alt="">
-
-                <div class="slick-bottom">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-10">
-                                <h1 class="slick-title">Blog 33333</h1>
-
-                                <p class="lead text-white mt-lg-3 mb-lg-5">Content blog 33333</p>
-
-                                <a href="contact.html" class="btn custom-btn">View blog</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <section class="about section-padding">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-12 text-center">
-                        <h2 class="mb-5"><span>List blog</span></h2>
-                    </div>
-
-                    <div class="col-lg-10 col-12">
-                        <div class="tab-content mt-2" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                                aria-labelledby="pills-home-tab">
-
-                                <div class="row"
-                                    style="width: 100%; margin-right: 0px !important;margin-left: 0px !important;box-shadow: 6px 6px 18px 4px rgb(0 0 0 / 70%); margin-bottom: 5%;border-radius: 10px;">
-                                    <div class="col-lg-4 col-12" style="display: flex;
-                                        align-items: center;">
-                                        <img src="images\product\image_product.jpg" class="img-fluid" alt="">
-                                    </div>
-
-                                    <div class="col-lg-8 col-12">
-                                        <div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
-                                            <h1 style="font-size: 22px;
-                                                font-weight: 600;" class="mb-3 ">Trương Khánh Toàn</h1>
-                                            <div class="mb-3 date-create">
-                                                <p>2022/03/22</p>
-                                            </div>
-                                            <h4 class="mb-3">Toàn mặt lol</h4>
-                                            <p>Aiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol này
-                                                <br>
-                                            </p>
-                                            <div class="mt-2 mt-lg-auto">
-                                                <a style="" href="#" class="bi-heart-fill product-icon">
-                                                    <p>2000</p>
-                                                </a>
-                                                <br>
-                                                <a href="product-detail.html" class="custom-link mb-2">
-                                                    View details
-                                                    <i class="bi-arrow-right ms-2"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row"
-                                    style="width: 100%; margin-right: 0px !important;margin-left: 0px !important;box-shadow: 6px 6px 18px 4px rgb(0 0 0 / 70%); margin-bottom: 5%;border-radius: 10px;">
-                                    <div class="col-lg-4 col-12" style="display: flex;
-                                        align-items: center;">
-                                        <img src="images\product\image_product.jpg" class="img-fluid" alt="">
-                                    </div>
-
-                                    <div class="col-lg-8 col-12">
-                                        <div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
-                                            <h1 style="font-size: 22px;
-                                                font-weight: 600;" class="mb-3 ">Trương Khánh Toàn</h1>
-                                            <div class="mb-3 date-create">
-                                                <p>2022/03/22</p>
-                                            </div>
-                                            <h4 class="mb-3">Toàn mặt lol</h4>
-                                            <p>Aiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol này
-                                                <br>
-                                            </p>
-                                            <div class="mt-2 mt-lg-auto">
-                                                <a style="" href="#" class="bi-heart-fill product-icon">
-                                                    <p>2000</p>
-                                                </a>
-                                                <br>
-                                                <a href="product-detail.html" class="custom-link mb-2">
-                                                    View details
-                                                    <i class="bi-arrow-right ms-2"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row"
-                                    style="width: 100%; margin-right: 0px !important;margin-left: 0px !important;box-shadow: 6px 6px 18px 4px rgb(0 0 0 / 70%); margin-bottom: 5%;border-radius: 10px;">
-                                    <div class="col-lg-4 col-12" style="display: flex;
-                                        align-items: center;">
-                                        <img src="images\product\image_product.jpg" class="img-fluid" alt="">
-                                    </div>
-
-                                    <div class="col-lg-8 col-12">
-                                        <div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
-                                            <h1 style="font-size: 22px;
-                                                font-weight: 600;" class="mb-3 ">Trương Khánh Toàn</h1>
-                                            <div class="mb-3 date-create">
-                                                <p>2022/03/22</p>
-                                            </div>
-                                            <h4 class="mb-3">Toàn mặt lol</h4>
-                                            <p>Aiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol này
-                                                <br>
-                                            </p>
-                                            <div class="mt-2 mt-lg-auto">
-                                                <a style="" href="#" class="bi-heart-fill product-icon">
-                                                    <p>2000</p>
-                                                </a>
-                                                <br>
-                                                <a href="product-detail.html" class="custom-link mb-2">
-                                                    View details
-                                                    <i class="bi-arrow-right ms-2"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row"
-                                    style="width: 100%; margin-right: 0px !important;margin-left: 0px !important;box-shadow: 6px 6px 18px 4px rgb(0 0 0 / 70%); margin-bottom: 5%;border-radius: 10px;">
-                                    <div class="col-lg-4 col-12" style="display: flex;
-                                        align-items: center;">
-                                        <img src="images\product\image_product.jpg" class="img-fluid" alt="">
-                                    </div>
-
-                                    <div class="col-lg-8 col-12">
-                                        <div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
-                                            <h1 style="font-size: 22px;
-                                                font-weight: 600;" class="mb-3 ">Trương Khánh Toàn</h1>
-                                            <div class="mb-3 date-create">
-                                                <p>2022/03/22</p>
-                                            </div>
-                                            <h4 class="mb-3">Toàn mặt lol</h4>
-                                            <p>Aiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol này
-                                                <br>
-                                            </p>
-                                            <div class="mt-2 mt-lg-auto">
-                                                <a style="" href="#" class="bi-heart-fill product-icon">
-                                                    <p>2000</p>
-                                                </a>
-                                                <br>
-                                                <a href="product-detail.html" class="custom-link mb-2">
-                                                    View details
-                                                    <i class="bi-arrow-right ms-2"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-        </section>
-
-
-    </main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-lg-3 col-10 me-auto mb-4">
-                    <h4 class="text-white mb-3"><a href="index.html">Little</a> Fashion</h4>
-                    <p class="copyright-text text-muted mt-lg-5 mb-4 mb-lg-0">Copyright © 2022 <strong>Little
-                            Fashion</strong></p>
-                    <br>
-                    <p class="copyright-text">Designed by <a href="https://www.tooplate.com/"
-                            target="_blank">Tooplate</a></p>
-                </div>
-
-                <div class="col-lg-5 col-8">
-                    <h5 class="text-white mb-3">Sitemap</h5>
-
-                    <ul class="footer-menu d-flex flex-wrap">
-                        <li class="footer-menu-item"><a href="about.html" class="footer-menu-link">Story</a></li>
-
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Products</a></li>
-
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Privacy policy</a></li>
-
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">FAQs</a></li>
-
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Contact</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-3 col-4">
-                    <h5 class="text-white mb-3">Social</h5>
-
-                    <ul class="social-icon">
-
-                        <li><a href="#" class="social-icon-link bi-youtube"></a></li>
-
-                        <li><a href="#" class="social-icon-link bi-whatsapp"></a></li>
-
-                        <li><a href="#" class="social-icon-link bi-instagram"></a></li>
-
-                        <li><a href="#" class="social-icon-link bi-skype"></a></li>
-                    </ul>
-                </div>
-
-            </div>
-        </div>
-    </footer>
-
-    <!-- JAVASCRIPT FILES -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/Headroom.js"></script>
-    <script src="js/jQuery.headroom.js"></script>
-    <script src="js/slick.min.js"></script>
-    <script src="js/custom.js"></script>
+	<!-- JAVASCRIPT FILES -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<script src="js/Headroom.js"></script>
+	<script src="js/jQuery.headroom.js"></script>
+	<script src="js/slick.min.js"></script>
+	<script src="js/custom.js"></script>
 
 </body>
 
