@@ -118,7 +118,7 @@ public class AdminController {
 
 	/**
 	 * select Post View
-	 * 
+	 * @param id
 	 * @param model
 	 * @return String
 	 * @throws XMLStreamException
@@ -211,48 +211,6 @@ public class AdminController {
 		return map;
 	}
 
-//    @RequestMapping(value = { "/selectAccountList" }, method = RequestMethod.POST)
-//	public String updateAccount(ModelMap model, HttpServletRequest request) {
-//
-//		try {
-//			
-//			String idAcc = request.getParameter("idacc");
-//			String isdelete = request.getParameter("isdelete");
-//			String isactive = request.getParameter("isactive");
-//			String role = request.getParameter("roleacc");
-//			
-//			List<Account> listAccount = accountService.ReadListAccount();
-//			Account a = new Account();
-//			for (Account account : listAccount) {
-//				if ((account.getId()).equalsIgnoreCase(idAcc)) {
-//					a = account;
-//					
-//					a.setId(idAcc);
-//				    a.setRole(role);
-//				    if ("on".equalsIgnoreCase(isdelete)) {
-//						a.setIsdelete("Y");
-//					}else {
-//						a.setIsdelete("N");
-//					}
-//				    if ("on".equalsIgnoreCase(isactive)) {
-//						a.setIsactive("Y");
-//					}else {
-//						a.setIsactive("N");
-//					}
-//				    
-//				    
-//				    accountService.UpdateUser(a);
-//				}
-//			}
-//			
-//		    
-//			
-//		} catch (Exception e) {
-//		}
-//    	
-//		return "redirect:/selectAccountList";
-//
-//	}
 
 	/**
 	 * update Account
