@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLStreamException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,12 @@ public class UserController {
 	 * select Post List User
 	 * 
 	 * @param model
+	 * @param HttpServletRequest
 	 * @return String
 	 * @throws Exception
 	 */
 	@RequestMapping("/selectPostListU")
-	public String selectPostListUser(ModelMap model)
+	public String selectPostListU(ModelMap model, HttpServletRequest request)
 			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
 		// read list post from data xml 
@@ -62,6 +64,20 @@ public class UserController {
 					post.setUserid(acc.getFullname());
 				}
 				listPostSave.add(post);
+			}
+		}
+		 
+		 String userNameLog = "request.getAttribute(\"userName\")";
+		 
+		 for (Post post : listPostSave) {
+			for (String likes : post.getLikes()) {
+				if (likes.equals("request.getAttribute(\"userName\")")) {
+					post.setFlg("Y");
+					break;
+				}else {
+					post.setFlg("N");
+				}
+				
 			}
 		}
 		 model.addAttribute("listPost", listPostSave);
@@ -88,8 +104,10 @@ public class UserController {
 			listPostTrend =  _listpost;
 		}
 		 
-		 model.addAttribute("listPostTrend", listPostTrend);
 		
+		 
+		 model.addAttribute("listPostTrend", listPostTrend);
+		 
 		return "USER/index";
 	}
 	

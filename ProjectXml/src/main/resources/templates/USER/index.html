@@ -7,13 +7,14 @@
 	</section>
 
 	<main>
-	
-	<div th:replace="navigationU :: nav_headerU"></div>
+
+		<div th:replace="navigationU :: nav_headerU"></div>
 
 		<section class="slick-slideshow">
-		
+
 			<div class="slick-custom" th:each="postTrend : ${listPostTrend}">
-				<img th:src="${postTrend.img}" src="images\background.jpg" class="img-fluid" alt="">
+				<img th:src="${postTrend.img}" src="images\background.jpg"
+					class="img-fluid" alt="">
 
 				<div class="slick-bottom">
 					<div class="container">
@@ -21,16 +22,17 @@
 							<div class="col-lg-6 col-10">
 								<h1 th:text="${postTrend.title}" class="slick-title">Blog 1</h1>
 
-								<p th:text="${postTrend.desription}" class="lead text-white mt-lg-3 mb-lg-5">Content blog 1111111</p>
+								<p th:text="${postTrend.desription}"
+									class="lead text-white mt-lg-3 mb-lg-5">Content blog
+									1111111</p>
 
-								<a th:href="@{'/selectPostViewU?id='+ ${postTrend.id}}" href="about.html" class="btn custom-btn">View blog</a>
+								<a th:href="@{'/selectPostViewU?id='+ ${postTrend.id}}"
+									href="about.html" class="btn custom-btn">View blog</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-			
 
 		</section>
 
@@ -39,40 +41,49 @@
 				<div class="row">
 
 					<div class="col-12 text-center">
-						<h2 class="mb-5"><span>List blog</span></h2>
+						<h2 class="mb-5">
+							<span>List blog</span>
+						</h2>
 					</div>
 
 					<div class="col-lg-10 col-12">
 						<div class="tab-content mt-2" id="pills-tabContent">
-							<div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-								aria-labelledby="pills-home-tab">
+							<div class="tab-pane fade show active" id="pills-home"
+								role="tabpanel" aria-labelledby="pills-home-tab">
 
 								<div class="row" th:each="Post : ${listPost}"
-									style="width: 100%; margin-right: 0px !important;margin-left: 0px !important;box-shadow: 6px 6px 18px 4px rgb(0 0 0 / 70%); margin-bottom: 5%;border-radius: 10px;">
-									<div class="col-lg-4 col-12" style="display: flex;
-										align-items: center;">
-										<img th:src="${Post.img}"  src="images\product\image_product.jpg" class="img-fluid" alt="">
+									style="width: 100%; margin-right: 0px !important; margin-left: 0px !important; box-shadow: 6px 6px 18px 4px rgb(0 0 0/ 70%); margin-bottom: 5%; border-radius: 10px;">
+									<div class="col-lg-4 col-12"
+										style="display: flex; align-items: center;">
+										<img th:src="${Post.img}"
+											src="images\product\image_product.jpg" class="img-fluid"
+											alt="">
 									</div>
 
 									<div class="col-lg-8 col-12">
 										<div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
-											<h1 style="font-size: 22px;
-												font-weight: 600;" class="mb-3 " th:text="${Post.userid}">Trương Khánh Toàn</h1>
+											<h1 style="font-size: 22px; font-weight: 600;" class="mb-3 "
+												th:text="${Post.userid}"></h1>
 											<div class="mb-3 date-create">
 												<p>2022/03/22</p>
 											</div>
-											<h4 class="mb-3" th:text="${Post.title}">Toàn mặt lol</h4>
+											<h4 class="mb-3" th:text="${Post.title}"></h4>
 											<p th:text="${Post.desription}">
 												<br>
 											</p>
 											<div class="mt-2 mt-lg-auto">
-												<a style="" href="#" class="bi-heart-fill product-icon">
-													<p th:text="${#lists.size(Post.likes)}">2000</p>
-												</a>
-												<br>
-												<a th:href="@{'/selectPostViewU?id='+ ${Post.id}}" href="product-detail.html" class="custom-link mb-2">
-													View details
-													<i class="bi-arrow-right ms-2"></i>
+												<a onclick="actionLike()" style="color: red" href="#"
+													class="bi-heart-fill product-icon"
+													th:if="${Post.flg == 'Y'}" id="like" th:value="N">
+													<p th:text="${#lists.size(Post.likes)}"></p>
+												</a> <a onclick="actionLike()" href="#"
+													class="bi-heart-fill product-icon"
+													th:if="${Post.flg == 'N'}" th:value="Y">
+													<p th:text="${#lists.size(Post.likes)}"></p>
+												</a> <br> <a
+													th:href="@{'/selectPostViewU?id='+ ${Post.id}}"
+													href="product-detail.html" class="custom-link mb-2">
+													View details <i class="bi-arrow-right ms-2"></i>
 												</a>
 											</div>
 										</div>
@@ -90,6 +101,42 @@
 	<script src="js/jQuery.headroom.js"></script>
 	<script src="js/slick.min.js"></script>
 	<script src="js/custom.js"></script>
+
+	<script type="text/javascript">
+		function updateLike(element) {
+			link = $(element);
+			var id = link.attr("id");
+			var value = link.attr("value");
+			var type = link.attr("type");
+
+			var valCheckbox = '';
+			if (type == 'select') {
+				if ($(element).is(':selected')) {
+					valCheckbox = $(element).val()
+				}
+			} else {
+				if ($(element).is(':checked')) {
+					valCheckbox = 'Y'
+				} else {
+					valCheckbox = 'N'
+				}
+			}
+
+			$.ajax({
+				url : "./updateAccountPostAjax?id=" + id + "&valCheckbox="
+						+ valCheckbox + "&value=" + value,
+				method : 'post',
+				async : false,
+				success : function(data) {
+					if (data == "N") {
+						$('#checkbox' + id).prop('checked', false);
+					} else {
+						$('#checkbox' + id).prop('checked', true);
+					}
+				}
+			});
+		}
+	</script>
 
 </body>
 
