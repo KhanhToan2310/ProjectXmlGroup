@@ -132,7 +132,7 @@ function updateData(element){
 	var value = link.attr("value");
 	
 	$.ajax({
-		url: "./updatePost?id=" + id + "&valCheckbox=" + valCheckbox +"&value=" + value,
+		url: "./updatePostAjax?id=" + id + "&valCheckbox=" + valCheckbox +"&value=" + value,
 		method: 'post',
 		async: false,
 		success: function(data){

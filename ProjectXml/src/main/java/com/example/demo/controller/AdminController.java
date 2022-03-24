@@ -91,7 +91,7 @@ public class AdminController {
      * @throws XMLStreamException
      */
     @ResponseBody
-    @RequestMapping(value = "/updatePost")
+    @RequestMapping(value = "/updatePostAjax")
     public String updatePost(@RequestParam String id, @RequestParam String valCheckbox, @RequestParam String value)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
@@ -102,10 +102,18 @@ public class AdminController {
             if (id.equals(post.getId())) {
                 temp = post;
 
-                if ("delete".equals(value)) {
+                switch (value) {
+                case "delete":
                     temp.setIsdelete(valCheckbox);
-                } else {
+                    break;
+                case "visible":
                     temp.setIdisvisible(valCheckbox);
+                    break;
+                case "select":
+                    temp.setStatusid(valCheckbox);
+                    break;
+                default:
+                    break;
                 }
 
                 postService.updatePosts(temp);
@@ -141,6 +149,7 @@ public class AdminController {
             }
         }
 
+        model.addAttribute("statusList", statusService.ReadListStatus());
         model.addAttribute("statusMap", selectStatusMap());
         model.addAttribute("userName", userName);
         model.addAttribute("post", post);
