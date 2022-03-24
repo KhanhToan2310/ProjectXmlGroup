@@ -29,7 +29,10 @@ import com.example.demo.util.DateUtil;
 @Controller
 public class UserController {
 
-	@Autowiredprivate 
+	@Autowired
+	private PostService postService;
+	
+	@Autowired
 	private AccountService accountService;
 	
 	/**
@@ -44,20 +47,23 @@ public class UserController {
 	public String selectPostListU(ModelMap model, HttpServletRequest request)
 			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String checkLoginSession(HttpServletRequest request,@ModelAttribute("account") Account account) throws Exception {
-		String username = (String) request.getSession().getAttribute("username");
-		if (username != null) {
-			List<Account> listAccount = accountService.ReadListAccount();
-			for (Account a : listAccount) {
-				if (username.equals(a.getUsername())) {
-					if (a.getRole() == "1")
-						return "ADMIN/tablesAccounts";
-					else if (a.getRole() == "2")
-						return "ADMIN/postList";
-					else
-						return "USER/index";
+		// read list post from data xml 
+		// sort list post by date update
+		// add list post on model 
+		List<Post> list = postService.readListPost();
+		List<Post> listPostSave = new ArrayList<>();
+	
+		 sortArray(list);
+			
+		 
+		 for (Post post : list) {
+			if ("Y".equalsIgnoreCase(post.getIdisvisible()) && "2".equalsIgnoreCase(post.getStatusid())) {
+				
+				Account acc = accountService.findAccount(post.getUserid());
+				if ((acc.getId()).equalsIgnoreCase(post.getUserid())) {
+					post.setUserid(acc.getFullname());
 				}
+				listPostSave.add(post);
 			}
 		}
 		 
