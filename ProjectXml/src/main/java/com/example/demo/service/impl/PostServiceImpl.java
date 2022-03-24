@@ -1,12 +1,10 @@
 package com.example.demo.service.impl;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -14,58 +12,25 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.events.*;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.Account;
 import com.example.demo.model.Post;
 import com.example.demo.service.PostService;
 
 @Service
 public class PostServiceImpl implements PostService {
-
-//	public static void main(String[] args)
-//			throws XMLStreamException, FileNotFoundException, UnsupportedEncodingException {
-//		PostServiceImpl n = new PostServiceImpl();
-//
-//		Post p = new Post();
-//		p.setId("1");
-//		p.setDatecreate("1");
-//		p.setDateupdate("1");
-//		p.setDesription("1");
-//		p.setIdisvisible("1");
-//		p.setImg("1");
-//		p.setIsdelete("1");
-//		List<String> s = new ArrayList<String>();
-//		s.add("1");
-//		s.add("2");
-//		
-//		p.setLikes(s);
-//		p.setStatusid("1");
-//		p.setTitle("1");
-//		p.setUserid("1");
-//		n.addNewPosts(p);
-//		
-//		
-//
-////		n.writePost(n.readListPost());
-//
-//		List<Post> list = n.readListPost();
-//		for (Post post : list) {
-//			System.out.println(post);
-//		}
-//
-//	}
 
     private static String XML_FILE_NAME = "posts.xml";
 
