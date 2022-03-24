@@ -81,59 +81,26 @@ https://www.tooplate.com/view/2127-little-fashion
         </nav>
 
         <section class="slick-slideshow">
-            <div class="slick-custom">
-                <img src="images\background.jpg" class="img-fluid" alt="">
+        
+            <div class="slick-custom" th:each="postTrend : ${listPostTrend}">
+                <img th:src="${postTrend.img}" src="images\background.jpg" class="img-fluid" alt="">
 
                 <div class="slick-bottom">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-6 col-10">
-                                <h1 class="slick-title">Blog 1</h1>
+                                <h1 th:text="${postTrend.title}" class="slick-title">Blog 1</h1>
 
-                                <p class="lead text-white mt-lg-3 mb-lg-5">Content blog 1111111</p>
+                                <p th:text="${postTrend.desription}" class="lead text-white mt-lg-3 mb-lg-5">Content blog 1111111</p>
 
-                                <a href="about.html" class="btn custom-btn">View blog</a>
+                                <a th:href="@{'/selectPostViewU?id='+ ${postTrend.id}}" href="about.html" class="btn custom-btn">View blog</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="slick-custom">
-                <img src="images\background.jpg" class="img-fluid" alt="">
-
-                <div class="slick-bottom">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-10">
-                                <h1 class="slick-title">Blog 2</h1>
-
-                                <p class="lead text-white mt-lg-3 mb-lg-5">Content blog 222222</p>
-
-                                <a href="product.html" class="btn custom-btn">View blog</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="slick-custom">
-                <img src="images\background.jpg" class="img-fluid" alt="">
-
-                <div class="slick-bottom">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-10">
-                                <h1 class="slick-title">Blog 33333</h1>
-
-                                <p class="lead text-white mt-lg-3 mb-lg-5">Content blog 33333</p>
-
-                                <a href="contact.html" class="btn custom-btn">View blog</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
 
         </section>
 
@@ -150,36 +117,30 @@ https://www.tooplate.com/view/2127-little-fashion
                             <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                                 aria-labelledby="pills-home-tab">
 
-                                <div class="row"
+                                <div class="row" th:each="Post : ${listPost}"
                                     style="width: 100%; margin-right: 0px !important;margin-left: 0px !important;box-shadow: 6px 6px 18px 4px rgb(0 0 0 / 70%); margin-bottom: 5%;border-radius: 10px;">
                                     <div class="col-lg-4 col-12" style="display: flex;
                                         align-items: center;">
-                                        <img src="images\product\image_product.jpg" class="img-fluid" alt="">
+                                        <img th:src="${Post.img}"  src="images\product\image_product.jpg" class="img-fluid" alt="">
                                     </div>
 
                                     <div class="col-lg-8 col-12">
                                         <div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
                                             <h1 style="font-size: 22px;
-                                                font-weight: 600;" class="mb-3 ">Trương Khánh Toàn</h1>
+                                                font-weight: 600;" class="mb-3 " th:text="${Post.userid}">Trương Khánh Toàn</h1>
                                             <div class="mb-3 date-create">
                                                 <p>2022/03/22</p>
                                             </div>
-                                            <h4 class="mb-3">Toàn mặt lol</h4>
-                                            <p>Aiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol này
+                                            <h4 class="mb-3" th:text="${Post.title}">Toàn mặt lol</h4>
+                                            <p th:text="${Post.desription}">
                                                 <br>
                                             </p>
                                             <div class="mt-2 mt-lg-auto">
                                                 <a style="" href="#" class="bi-heart-fill product-icon">
-                                                    <p>2000</p>
+                                                    <p th:text="${#lists.size(Post.likes)}">2000</p>
                                                 </a>
                                                 <br>
-                                                <a href="product-detail.html" class="custom-link mb-2">
+                                                <a th:href="@{'/selectPostViewU?id='+ ${Post.id}}" href="product-detail.html" class="custom-link mb-2">
                                                     View details
                                                     <i class="bi-arrow-right ms-2"></i>
                                                 </a>
@@ -188,120 +149,9 @@ https://www.tooplate.com/view/2127-little-fashion
                                     </div>
 
                                 </div>
-                                <div class="row"
-                                    style="width: 100%; margin-right: 0px !important;margin-left: 0px !important;box-shadow: 6px 6px 18px 4px rgb(0 0 0 / 70%); margin-bottom: 5%;border-radius: 10px;">
-                                    <div class="col-lg-4 col-12" style="display: flex;
-                                        align-items: center;">
-                                        <img src="images\product\image_product.jpg" class="img-fluid" alt="">
-                                    </div>
-
-                                    <div class="col-lg-8 col-12">
-                                        <div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
-                                            <h1 style="font-size: 22px;
-                                                font-weight: 600;" class="mb-3 ">Trương Khánh Toàn</h1>
-                                            <div class="mb-3 date-create">
-                                                <p>2022/03/22</p>
-                                            </div>
-                                            <h4 class="mb-3">Toàn mặt lol</h4>
-                                            <p>Aiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol này
-                                                <br>
-                                            </p>
-                                            <div class="mt-2 mt-lg-auto">
-                                                <a style="" href="#" class="bi-heart-fill product-icon">
-                                                    <p>2000</p>
-                                                </a>
-                                                <br>
-                                                <a href="product-detail.html" class="custom-link mb-2">
-                                                    View details
-                                                    <i class="bi-arrow-right ms-2"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row"
-                                    style="width: 100%; margin-right: 0px !important;margin-left: 0px !important;box-shadow: 6px 6px 18px 4px rgb(0 0 0 / 70%); margin-bottom: 5%;border-radius: 10px;">
-                                    <div class="col-lg-4 col-12" style="display: flex;
-                                        align-items: center;">
-                                        <img src="images\product\image_product.jpg" class="img-fluid" alt="">
-                                    </div>
-
-                                    <div class="col-lg-8 col-12">
-                                        <div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
-                                            <h1 style="font-size: 22px;
-                                                font-weight: 600;" class="mb-3 ">Trương Khánh Toàn</h1>
-                                            <div class="mb-3 date-create">
-                                                <p>2022/03/22</p>
-                                            </div>
-                                            <h4 class="mb-3">Toàn mặt lol</h4>
-                                            <p>Aiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol này
-                                                <br>
-                                            </p>
-                                            <div class="mt-2 mt-lg-auto">
-                                                <a style="" href="#" class="bi-heart-fill product-icon">
-                                                    <p>2000</p>
-                                                </a>
-                                                <br>
-                                                <a href="product-detail.html" class="custom-link mb-2">
-                                                    View details
-                                                    <i class="bi-arrow-right ms-2"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row"
-                                    style="width: 100%; margin-right: 0px !important;margin-left: 0px !important;box-shadow: 6px 6px 18px 4px rgb(0 0 0 / 70%); margin-bottom: 5%;border-radius: 10px;">
-                                    <div class="col-lg-4 col-12" style="display: flex;
-                                        align-items: center;">
-                                        <img src="images\product\image_product.jpg" class="img-fluid" alt="">
-                                    </div>
-
-                                    <div class="col-lg-8 col-12">
-                                        <div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
-                                            <h1 style="font-size: 22px;
-                                                font-weight: 600;" class="mb-3 ">Trương Khánh Toàn</h1>
-                                            <div class="mb-3 date-create">
-                                                <p>2022/03/22</p>
-                                            </div>
-                                            <h4 class="mb-3">Toàn mặt lol</h4>
-                                            <p>Aiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol nàyAiss.... Chết tiệt thằng mặt lol
-                                                nàyAiss.... Chết tiệt thằng mặt lol này
-                                                <br>
-                                            </p>
-                                            <div class="mt-2 mt-lg-auto">
-                                                <a style="" href="#" class="bi-heart-fill product-icon">
-                                                    <p>2000</p>
-                                                </a>
-                                                <br>
-                                                <a href="product-detail.html" class="custom-link mb-2">
-                                                    View details
-                                                    <i class="bi-arrow-right ms-2"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
+                                
+                                
+                                
 
 
         </section>
