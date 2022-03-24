@@ -1,0 +1,208 @@
+<head th:replace="fragment :: header_link('Admin - Update Account')" />
+<body class="">
+	<div class="wrapper ">
+		<div th:replace="navigation :: menu"></div>
+		<div class="main-panel">
+			<div th:replace="navigation :: nav_header"></div>
+			<div class="content">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card card-user">
+							<div class="card-body">
+								<form id="form1" name="form2" action="selectFindAccountView" method="POST">
+									<div class="card-header">
+										<h5 style="text-align: center;" class="card-title">Change Password</h5>
+									</div>
+									<input type="hidden" th:value="${account.password}" id="oldPassHidden" name="oldPassHidden">
+									<input type="hidden" th:value="${account.id}" name="id" id="id">
+									<div class="col-md-12 pl-1">
+										<div class="form-group">
+											<label>Old Password</label> 
+											<input type="password" name="oldPassword" id="oldPassword" class="form-control" placeholder="old password" required="required" onblur="validateOldPassword()">
+											<p style="color: red;" id="notifiOldPass"></p>
+										</div>
+									</div>
+									<div class="col-md-12 pl-1">
+										<div class="form-group">
+											<label>New Password</label> 
+											<input type="password" name="newPassword" id="newPassword" class="form-control" placeholder="New password" required="required" onblur="validateNewPassword()">
+											<p style="color: red;" id="notifiNewPass"></p>
+										</div>
+									</div>
+									<div class="col-md-12 pl-1">
+										<div class="form-group">
+											<label>Re-Password</label> 
+											<input type="password" name="rePassword" id="rePassword" class="form-control" placeholder="Re-password" required="required" onblur="validateRePassword()">
+											<p style="color: red;" id="notifiRePass"></p>
+										</div>
+									</div>
+									<div class="row">
+										<div class="update ml-auto mr-auto">
+											<button type="submit" class="btn btn-primary btn-round" onclick="submitPassword()"> Change</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="card card-user">
+							<div class="card-header">
+								<h5 style="text-align: center;" class="card-title">Edit Profile</h5>
+							</div>
+							<div class="card-body">
+								<form id="form2" name="form2" action="selectFindAccountView" method="POST">
+									<div class="row">
+										<div class="col-md-5 pr-1">
+											<div class="form-group">
+												<label>Username</label> 
+												<input type="hidden" th:value="${account.id}" name="id" id="id"> 
+												<input type="text" class="form-control" disabled="" th:value="${account.username}" placeholder="username" value="Enter User Name">
+											</div>
+										</div>
+										<div class="col-md-3 px-1">
+											<div class="form-group">
+												<label>Full name</label> 
+												<input type="text" class="form-control" name="fullname" id="fullname" th:value="${account.fullname}" placeholder="Fullname" required="required">
+											</div>
+										</div>
+										<div class="col-md-4 pl-1">
+											<div class="form-group">
+												<label for="exampleInputEmail1">Birthday</label> 
+												<input type="text" name="birthday" id="birthday" th:value="${account.birthday}" class="form-control" placeholder="Birthday" required="required">
+												<div class="input-group date" data-provide="datepicker">
+													<input type="text" class="form-control">
+													<div class="input-group-addon">
+														<span class="glyphicon glyphicon-th"></span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 pr-1">
+											<div class="form-group">
+												<label>Age</label> 
+												<input type="text" class="form-control" placeholder="age" name="age" id="age" th:value="${account.age}" required="required">
+											</div>
+										</div>
+										<div class="col-md-6 pl-1">
+											<div class="form-group">
+												<label>Email</label> 
+												<input type="email" name="email" id="email" th:value="${account.email}" class="form-control" placeholder="Email" required="required">
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label>Phone</label> 
+												<input type="text" class="form-control" name="phone" id="phone" th:value="${account.phone}" placeholder="Phone" required="required">
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-4 pr-1">
+											<div class="form-group">
+												<label>Role</label> 
+												<input disabled="disabled" type="text" name="role" id="role" th:value="${selectRoleMap[account.role]}" class="form-control" placeholder="City" value="Melbourne">
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="update ml-auto mr-auto">
+											<button type="submit" class="btn btn-primary btn-round">Update Profile</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<footer th:replace="fragment :: footer"></footer>
+		</div>
+	</div>
+<script type="text/javascript">
+	var isNewPass = false;
+	var isRePass = false;
+	var isOldPass = false;
+
+	$(document).ready( function() {
+		$("#form2").submit( function(event) {
+			var id = $("#id").val();
+			var phone = $("#phone").val();
+			var email = $("#email").val();
+			var age = $("#age").val();
+			var birthday = $("#birthday").val();
+			var fullname = $("#fullname").val();
+			$.ajax({
+				url : "./updateAccountFind?id=" + id + "&phone=" + phone + "&email=" + email + "&age=" + age + "&birthday=" + birthday + "&fullname=" + fullname,
+				method : 'post',
+				async : false,
+				success : function(data) {
+					event.preventDefault();
+					alert("Update Success!!");
+				}
+			});
+		});
+	});
+		
+	function validateRePassword() {
+		var rePassword = $("#rePassword").val();
+		var newPassword = $("#newPassword").val();
+		var oldPassHidden = $("#oldPassHidden").val();
+		 if (newPassword != rePassword) {
+			document.getElementById("notifiRePass").innerHTML = "Re-password don't same New Password!";
+			return isRePass = false;
+		} 
+		 document.getElementById("notifiRePass").innerHTML = "";
+			return isRePass = true;
+	}
+
+	function validateNewPassword() {
+		var newPassword = $("#newPassword").val();
+		var oldPassHidden = $("#oldPassHidden").val();
+		if (newPassword == oldPassHidden) {
+			document.getElementById("notifiNewPass").innerHTML = "New password same Old Password!";
+			return isNewPass = false;
+		}
+		document.getElementById("notifiNewPass").innerHTML = "";
+		return isNewPass = true;
+		
+	}
+
+	function validateOldPassword() {
+		var oldPassword = $("#oldPassword").val();
+		var oldPassHidden = $("#oldPassHidden").val();
+		if (oldPassword != oldPassHidden) {
+			document.getElementById("notifiOldPass").innerHTML = "Old password don't same!";
+			return isOldPass = false;
+		}
+		document.getElementById("notifiOldPass").innerHTML = "";
+		return isOldPass = true;
+		
+	}
+
+	function submitPassword() {
+		
+		if(isOldPass == true && isRePass == true && isNewPass == true){
+			var id = $("#id").val();
+			var newPassword = $("#newPassword").val();
+			
+			$.ajax({
+				url : "./updateAccountPassword?id=" + id + "&newPassword=" + newPassword,
+				method : 'post',
+				async : false,
+				success : function(data) {
+					event.preventDefault();
+					alert("Change Success!!");
+				}
+			});
+		}
+		
+	}
+
+</script>
+</body>
+</html>
