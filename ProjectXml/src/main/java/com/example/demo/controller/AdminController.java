@@ -29,15 +29,19 @@ import com.example.demo.util.DateUtil;
 @Controller
 public class AdminController {
 
+    /** accountService */
     @Autowired
     private AccountService accountService;
 
+    /** roleService */
     @Autowired
     private RoleService roleService;
 
+    /** postService */
     @Autowired
     private PostService postService;
 
+    /** statusService */
     @Autowired
     private StatusService statusService;
 
@@ -155,7 +159,7 @@ public class AdminController {
      * @throws FileNotFoundException
      * @throws Exception
      */
-    @RequestMapping(value = "/selectAccView")
+    @RequestMapping(value = "/selectAccountView")
     public String selectAccountView(ModelMap model, @RequestParam String id)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
@@ -167,7 +171,15 @@ public class AdminController {
         return "ADMIN/examples/accountView";
     }
 
-    // selectAccountView
+    /**
+     * select Account List
+     * 
+     * @param model
+     * @return String
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
     @RequestMapping("/selectAccountList")
     public String selectAccountList(ModelMap model)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
@@ -198,49 +210,6 @@ public class AdminController {
         return "ADMIN/examples/accountList";
     }
 
-//    @RequestMapping(value = { "/selectAccountList" }, method = RequestMethod.POST)
-//	public String updateAccount(ModelMap model, HttpServletRequest request) {
-//
-//		try {
-//			
-//			String idAcc = request.getParameter("idacc");
-//			String isdelete = request.getParameter("isdelete");
-//			String isactive = request.getParameter("isactive");
-//			String role = request.getParameter("roleacc");
-//			
-//			List<Account> listAccount = accountService.ReadListAccount();
-//			Account a = new Account();
-//			for (Account account : listAccount) {
-//				if ((account.getId()).equalsIgnoreCase(idAcc)) {
-//					a = account;
-//					
-//					a.setId(idAcc);
-//				    a.setRole(role);
-//				    if ("on".equalsIgnoreCase(isdelete)) {
-//						a.setIsdelete("Y");
-//					}else {
-//						a.setIsdelete("N");
-//					}
-//				    if ("on".equalsIgnoreCase(isactive)) {
-//						a.setIsactive("Y");
-//					}else {
-//						a.setIsactive("N");
-//					}
-//				    
-//				    
-//				    accountService.UpdateUser(a);
-//				}
-//			}
-//			
-//		    
-//			
-//		} catch (Exception e) {
-//		}
-//    	
-//		return "redirect:/selectAccountList";
-//
-//	}
-
     /**
      * update Account
      * 
@@ -253,7 +222,7 @@ public class AdminController {
      * @throws XMLStreamException
      */
     @ResponseBody
-    @RequestMapping(value = "/updateAccPostAjax")
+    @RequestMapping(value = "/updateAccountPostAjax")
     public String updateAccPost(@RequestParam String id, @RequestParam String valCheckbox, @RequestParam String value)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
@@ -282,125 +251,92 @@ public class AdminController {
     }
 
     /**
-     * select Status Map
+     * select Find Account View
      * 
-     * @return Map<String, String>
+     * @param model
+     * @return String
+     * @throws XMLStreamException
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * @throws Exception
      */
-    private Map<String, String> selectStatusMap() {
-        Map<String, String> map = new HashMap<String, String>();
-        List<Status> statusList = statusService.ReadListStatus();
+    @RequestMapping(value = "/updateAccountView")
+    public String selectFindAccountView(ModelMap model, @RequestParam String id)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-				accountService.UpdateUser(temp);
+        Account account = accountService.findAccount(id);
+        Map<String, String> selectRoleMap = selectRoleMap();
 
-			}
-		}
+        model.addAttribute("selectRoleMap", selectRoleMap);
+        model.addAttribute("account", account);
+        return "ADMIN/examples/accountForm";
+    }
 
-		return valCheckbox;
-	}
+    /**
+     * update Account Find
+     * 
+     * @param id
+     * @param phone
+     * @param email
+     * @param age
+     * @param birthday
+     * @param fullname
+     * @return null
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateAccountFind")
+    public String updateAccountFind(@RequestParam String id, @RequestParam String phone, @RequestParam String email,
+            @RequestParam String age, @RequestParam String birthday,
+            @RequestParam(name = "fullname", required = false) String fullname)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-	private Map<String, String> selectStatusMap() {
-		Map<String, String> map = new HashMap<String, String>();
-		List<Status> statusList = statusService.ReadListStatus();
+        List<Account> resultList = accountService.ReadListAccount();
 
-		for (Status status : statusList) {
-			map.put(status.getId(), status.getName());
-		}
+        for (Account account : resultList) {
+            if (account.getId().equalsIgnoreCase(id)) {
+                account.setAge(age);
+                account.setBirthday(birthday);
+                account.setEmail(email);
+                account.setFullname(fullname);
+                account.setPhone(phone);
 
-		return map;
-	}
+                accountService.UpdateUser(account);
 
-	/**
-	 * select Find Account View
-	 * 
-	 * @param model
-	 * @return String
-	 * @throws XMLStreamException
-	 * @throws UnsupportedEncodingException
-	 * @throws FileNotFoundException
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/selectFindAccountView")
-	public String selectFindAccountView(ModelMap model, @RequestParam String id)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+            }
+        }
 
-		Account account = accountService.findAccount(id);
-		Map<String, String> selectRoleMap = selectRoleMap();
+        return null;
+    }
 
-		model.addAttribute("selectRoleMap", selectRoleMap);
-		model.addAttribute("account", account);
-		return "ADMIN/examples/user";
-	}
+    /**
+     * update Account Password
+     * 
+     * @param id
+     * @param phone
+     * @return null
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateAccountPassword")
+    public String updateAccountPassword(@RequestParam String id, @RequestParam String newPassword)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-	/**
-	 * update Account Find
-	 * 
-	 * @param id
-	 * @param phone
-	 * @param email
-	 * @param age
-	 * @param birthday
-	 * @param fullname
-	 * @return null
-	 * @throws FileNotFoundException
-	 * @throws UnsupportedEncodingException
-	 * @throws XMLStreamException
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/updateAccountFind")
-	public String updateAccountFind(@RequestParam String id, @RequestParam String phone,
-			@RequestParam String email, @RequestParam String age, @RequestParam String birthday, @RequestParam(name = "fullname", required = false) String fullname)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+        List<Account> resultList = accountService.ReadListAccount();
 
-		List<Account> resultList = accountService.ReadListAccount();
-		Account temp = new Account();
+        for (Account account : resultList) {
+            if (account.getId().equalsIgnoreCase(id)) {
+                account.setPassword(newPassword);
 
-		for (Account account : resultList) {
-			if (account.getId().equalsIgnoreCase(id)) {
-				account.setAge(age);
-				account.setBirthday(birthday);
-				account.setEmail(email);
-				account.setFullname(fullname);
-				account.setPhone(phone);
-				
-				System.err.println("alo hi:");
-				accountService.UpdateUser(account);
-				
-			}
-		}
+                accountService.UpdateUser(account);
+            }
+        }
 
-		return null;
-	}
-	
-	/**
-	 * update Account Password
-	 * 
-	 * @param id
-	 * @param phone
-	 * @return null
-	 * @throws FileNotFoundException
-	 * @throws UnsupportedEncodingException
-	 * @throws XMLStreamException
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/updateAccountPassword")
-	public String updateAccountPassword(@RequestParam String id, @RequestParam String newPassword)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
-
-		List<Account> resultList = accountService.ReadListAccount();
-		Account temp = new Account();
-
-		for (Account account : resultList) {
-			if (account.getId().equalsIgnoreCase(id)) {
-				account.setPassword(newPassword);
-				
-				accountService.UpdateUser(account);
-			}
-		}
-
-		return null;
-	}
-
-        return map;
+        return null;
     }
 
     /**
@@ -414,6 +350,22 @@ public class AdminController {
 
         for (Role role : roles) {
             map.put(role.getId(), role.getName());
+        }
+
+        return map;
+    }
+
+    /**
+     * select Status Map
+     * 
+     * @return Map<String, String>
+     */
+    private Map<String, String> selectStatusMap() {
+        Map<String, String> map = new HashMap<String, String>();
+        List<Status> statusList = statusService.ReadListStatus();
+
+        for (Status status : statusList) {
+            map.put(status.getId(), status.getName());
         }
 
         return map;

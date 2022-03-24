@@ -87,55 +87,39 @@ input:checked+.slider:before {
 											<th>Detail</th>
 										</thead>
 										<tbody>
-
 											<tr th:each="acc,state : ${listAccount}">
-													
-													<td th:text="${state.index + 1}"></td>
-													<td th:text="${acc.fullname}"></td>
-													<td th:text="${acc.birthday}"></td>
-													<td th:text="${acc.email}"></td>
-													<td th:text="${acc.phone}"></td>
-													<!-- <td th:text="${selectRoleMap[acc.role]}"></td> -->
-
-													<td><select class="role" name="roleacc">
-															<option th:each="role : ${listRole}"
-																th:utext="${role.name}"
-																th:selected="${role.id == acc.role}"
-																onchange="updateData(this)" th:value="role" th:id="${acc.id}"
-																selected="selected" th:type="select" />
-
-															<!-- <option th:each="role : ${listRole}"
-																th:value="${role.id}" th:utext="${role.name}"
-																th:if="${role.name != selectRoleMap[acc.role]}" /> -->
-
-													</select></td>
-
-													<td><label class="switch"> 
-															<input name="isdelete" onchange="updateData(this)" th:value="delete" th:id="${acc.id}" th:type="checkbox" th:checked="${acc.isdelete} == Y ? true : false">
-															 --> <span
-															class="slider round"></span>
-													</label></td>
-
-													<td><label class="switch"> 
-													
-															
-															<input name="isactive" onchange="updateData(this)" th:value="active" th:id="${acc.id}"  th:type="checkbox" th:checked="${acc.isactive} == Y ? true : false">
-															
-															 --> <span
-															class="slider round"></span>
-													</label></td>
-													<td>
-														<a th:href="@{'/selectAccountView?id='+ ${acc.id}}" >view</a>
-													</td>
+												<td th:text="${state.index + 1}"></td>
+												<td th:text="${acc.fullname}"></td>
+												<td th:text="${acc.birthday}"></td>
+												<td th:text="${acc.email}"></td>
+												<td th:text="${acc.phone}"></td>
+												<td>
+													<select class="form-control" style="width: 70%" name="roleacc">
+														<option th:each="role : ${listRole}" th:utext="${role.name}" th:selected="${role.id == acc.role}" onchange="updateData(this)" th:value="role" th:id="${acc.id}" selected="selected" th:type="select" />
+													</select>
+												</td>
+												<td>
+													<label class="switch"> 
+														<input name="isdelete" onchange="updateData(this)" th:value="delete" th:id="${acc.id}" th:type="checkbox" th:checked="${acc.isdelete} == Y ? true : false">
+														<span class="slider round"></span>
+													</label>
+												</td>
+												<td>
+													<label class="switch"> 
+														<input name="isactive" onchange="updateData(this)" th:value="active" th:id="${acc.id}"  th:type="checkbox" th:checked="${acc.isactive} == Y ? true : false">
+														<span class="slider round"></span>
+													</label>
+												</td>
+												<td>
+													<a th:href="@{'/selectAccountView?id='+ ${acc.id}}" >view</a>
+												</td>
 											</tr>
-
 										</tbody>
 									</table>
 								</div>
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 			<footer th:replace="fragment :: footer"></footer>
@@ -166,7 +150,7 @@ input:checked+.slider:before {
 		}
 
 		$.ajax({
-			url : "./updateAccPostAjax?id=" + id + "&valCheckbox=" + valCheckbox
+			url : "./updateAccountPostAjax?id=" + id + "&valCheckbox=" + valCheckbox
 					+ "&value=" + value,
 			method : 'post',
 			async : false,
