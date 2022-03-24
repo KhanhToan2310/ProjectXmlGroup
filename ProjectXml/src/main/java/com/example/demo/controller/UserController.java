@@ -32,10 +32,10 @@ import com.example.demo.util.DateUtil;
 public class UserController {
 
 	@Autowired
-	private PostService postService;
+	private AccountService accountService;
 	
 	@Autowired
-	private AccountService accountService;
+	private PostService postService;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String checkLoginSession(HttpServletRequest request,@ModelAttribute("account") Account account) throws Exception {
@@ -68,7 +68,7 @@ public class UserController {
 				else if (a.getRole() == "2")
 					return "ADMIN/postList";
 				else
-					return "USER/index";
+					return "redirect:/selectPostListU";
 			} else {
 				model.addAttribute("message", "Username or password incorrect. Please input again !");
 			}
@@ -76,7 +76,6 @@ public class UserController {
 
 		return "USER/sign-in";
 	}
-	
 	
 	/**
 	 * select Post List User
@@ -110,7 +109,7 @@ public class UserController {
 			}
 		}
 		 
-		 String userNameLog = (String) request.getAttribute("userName");
+		 String userNameLog =  (String) request.getSession().getAttribute("username");
 		 
 		 System.err.println("alo: "+ userNameLog);
 		 for (Post post : listPostSave) {
