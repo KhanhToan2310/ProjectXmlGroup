@@ -131,6 +131,8 @@ public class UserController {
 		return "USER/product-detail";
 	}
 	
+    @RequestMapping("/selectUserProfile")
+    public String selectUserProfile() {
+        return "USER/profile";
+    }
 }
-
-
