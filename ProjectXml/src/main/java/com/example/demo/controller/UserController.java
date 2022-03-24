@@ -67,11 +67,12 @@ public class UserController {
 			}
 		}
 		 
-		 String userNameLog = "request.getAttribute(\"userName\")";
+		 String userNameLog = (String) request.getAttribute("userName");
 		 
+		 System.err.println("alo: "+ userNameLog);
 		 for (Post post : listPostSave) {
 			for (String likes : post.getLikes()) {
-				if (likes.equals("request.getAttribute(\"userName\")")) {
+				if (likes.equals(request.getAttribute("userName"))) {
 					post.setFlg("Y");
 					break;
 				}else {
