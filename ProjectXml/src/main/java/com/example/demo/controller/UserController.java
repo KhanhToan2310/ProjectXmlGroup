@@ -28,69 +28,47 @@ import com.example.demo.util.DateUtil;
 @Controller
 public class UserController {
 
-	@Autowired
-	private PostService postService;
-	
-	@Autowired
+	@Autowiredprivate 
 	private AccountService accountService;
-	
-	/**
-	 * select Post List User
-	 * 
-	 * @param model
-	 * @return String
-	 * @throws Exception
-	 */
-	@RequestMapping("/selectPostListU")
-	public String selectPostListUser(ModelMap model)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-		// read list post from data xml 
-		// sort list post by date update
-		// add list post on model 
-		List<Post> list = postService.readListPost();
-		List<Post> listPostSave = new ArrayList<>();
-	
-		 sortArray(list);
-			
-		 
-		 for (Post post : list) {
-			if ("Y".equalsIgnoreCase(post.getIdisvisible()) && "2".equalsIgnoreCase(post.getStatusid())) {
-				
-				Account acc = accountService.findAccount(post.getUserid());
-				if ((acc.getId()).equalsIgnoreCase(post.getUserid())) {
-					post.setUserid(acc.getFullname());
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String checkLoginSession(HttpServletRequest request,@ModelAttribute("account") Account account) throws Exception {
+		String username = (String) request.getSession().getAttribute("username");
+		if (username != null) {
+			List<Account> listAccount = accountService.ReadListAccount();
+			for (Account a : listAccount) {
+				if (username.equals(a.getUsername())) {
+					if (a.getRole() == "1")
+						return "ADMIN/tablesAccounts";
+					else if (a.getRole() == "2")
+						return "ADMIN/postList";
+					else
+						return "USER/index";
 				}
-				listPostSave.add(post);
 			}
 		}
-		 model.addAttribute("listPost", listPostSave);
-		 
-		 List<Post> _listpost = new ArrayList<Post>();
-		 for (Post post1 : listPostSave) {
-			_listpost.add(post1);
+		return "USER/sign-in";
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String loginAccount(HttpServletRequest request,@ModelAttribute("account") Account account, ModelMap model)
+			throws Exception {
+		for (Account a : accountService.ReadListAccount()) {
+			if (a.getUsername().equalsIgnoreCase(account.getUsername().trim())
+					&& a.getPassword().equalsIgnoreCase(account.getPassword().trim())) {
+				request.getSession().setAttribute("username", account.getUsername().trim());
+				if (a.getRole() == "1")
+					return "ADMIN/tablesAccounts";
+				else if (a.getRole() == "2")
+					return "ADMIN/postList";
+				else
+					return "USER/index";
+			} else {
+				model.addAttribute("message", "Username or password incorrect. Please input again !");
+			}
 		}
-		 List<Post> listPostTrend = new ArrayList<Post>();
-		 
-		 if(_listpost.size()>3) {
-			 for(int i=0 ; i<3; i++) {
-				 Post _post = _listpost.get(0);
-				 for(Post p : _listpost) {
-					 if ((p.getLikes().size()) > (_post.getLikes().size())) {
-						_post = p;
-					}
-				 }
-				 _listpost.remove(_post);
-				 listPostTrend.add(_post);
-				 
-			 }
-		 }else {
-			listPostTrend =  _listpost;
-		}
-		 
-		 model.addAttribute("listPostTrend", listPostTrend);
-		
-		return "USER/index";
+
+		return "USER/sign-in";
 	}
 	
 	private void sortArray(List<Post> arrayList) {
