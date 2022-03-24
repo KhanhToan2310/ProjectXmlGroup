@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -13,10 +12,8 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.DemoApplication;
 import com.example.demo.model.Role;
 import com.example.demo.service.RoleService;
 

@@ -1,31 +1,20 @@
 package com.example.demo.controller;
 
-import java.io.Console;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLStreamException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.model.Account;
 import com.example.demo.model.Post;
@@ -155,7 +144,7 @@ public class AdminController {
         model.addAttribute("post", post);
         return "ADMIN/examples/postView";
     }
-    
+
     /**
      * select Account View
      * 
@@ -206,18 +195,7 @@ public class AdminController {
         model.addAttribute("listAccount", list);
         model.addAttribute("selectRoleMap", selectRoleMap);
 
-        return "ADMIN/examples/tablesAccounts";
-    }
-
-    private Map<String, String> selectRoleMap() {
-        Map<String, String> map = new HashMap<String, String>();
-        List<Role> roles = roleService.ReadListRole();
-
-        for (Role role : roles) {
-            map.put(role.getId(), role.getName());
-        }
-
-        return map;
+        return "ADMIN/examples/accountList";
     }
 
 //    @RequestMapping(value = { "/selectAccountList" }, method = RequestMethod.POST)
@@ -262,7 +240,7 @@ public class AdminController {
 //		return "redirect:/selectAccountList";
 //
 //	}
-    
+
     /**
      * update Account
      * 
@@ -275,7 +253,7 @@ public class AdminController {
      * @throws XMLStreamException
      */
     @ResponseBody
-    @RequestMapping(value = "/updateAccPost")
+    @RequestMapping(value = "/updateAccPostAjax")
     public String updateAccPost(@RequestParam String id, @RequestParam String valCheckbox, @RequestParam String value)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
@@ -292,12 +270,10 @@ public class AdminController {
                     temp.setIsactive(valCheckbox);
                 }
                 if ("role".equals(value)) {
-					temp.setRole(valCheckbox);
-				}
+                    temp.setRole(valCheckbox);
+                }
 
                 accountService.UpdateUser(temp);
-                
-                
 
             }
         }
@@ -305,12 +281,33 @@ public class AdminController {
         return valCheckbox;
     }
 
+    /**
+     * select Status Map
+     * 
+     * @return Map<String, String>
+     */
     private Map<String, String> selectStatusMap() {
         Map<String, String> map = new HashMap<String, String>();
         List<Status> statusList = statusService.ReadListStatus();
 
         for (Status status : statusList) {
             map.put(status.getId(), status.getName());
+        }
+
+        return map;
+    }
+
+    /**
+     * select Role Map
+     * 
+     * @return Map<String, String>
+     */
+    private Map<String, String> selectRoleMap() {
+        Map<String, String> map = new HashMap<String, String>();
+        List<Role> roles = roleService.ReadListRole();
+
+        for (Role role : roles) {
+            map.put(role.getId(), role.getName());
         }
 
         return map;

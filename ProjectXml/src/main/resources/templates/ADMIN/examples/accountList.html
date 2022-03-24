@@ -1,4 +1,4 @@
-<head th:replace="fragment :: header_link('Admin - Account List')" />
+<head th:replace="fragment :: header_link('Admin - Account Management List')" />
 <style type="text/css">
 .switch {
 	position: relative;
@@ -141,45 +141,45 @@ input:checked+.slider:before {
 			<footer th:replace="fragment :: footer"></footer>
 		</div>
 	</div>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#example').DataTable();
-		});
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#example').DataTable();
+	});
 
-		function updateData(element) {
-			link = $(element);
-			var id = link.attr("id");
-			var value = link.attr("value");
-			var type = link.attr("type");
-			
-			var valCheckbox = '';
-			if(type == 'select'){
-				if ($(element).is(':selected')) {
-					valCheckbox = $(element).val()
-				}
-			}else{
-				if ($(element).is(':checked')) {
-					valCheckbox = 'Y'
+	function updateData(element) {
+		link = $(element);
+		var id = link.attr("id");
+		var value = link.attr("value");
+		var type = link.attr("type");
+		
+		var valCheckbox = '';
+		if(type == 'select'){
+			if ($(element).is(':selected')) {
+				valCheckbox = $(element).val()
+			}
+		}else{
+			if ($(element).is(':checked')) {
+				valCheckbox = 'Y'
+			} else {
+				valCheckbox = 'N'
+			}
+		}
+
+		$.ajax({
+			url : "./updateAccPostAjax?id=" + id + "&valCheckbox=" + valCheckbox
+					+ "&value=" + value,
+			method : 'post',
+			async : false,
+			success : function(data) {
+				if (data == "N") {
+					$('#checkbox' + id).prop('checked', false);
 				} else {
-					valCheckbox = 'N'
+					$('#checkbox' + id).prop('checked', true);
 				}
 			}
-
-			$.ajax({
-				url : "./updateAccPost?id=" + id + "&valCheckbox=" + valCheckbox
-						+ "&value=" + value,
-				method : 'post',
-				async : false,
-				success : function(data) {
-					if (data == "N") {
-						$('#checkbox' + id).prop('checked', false);
-					} else {
-						$('#checkbox' + id).prop('checked', true);
-					}
-				}
-			});
-		}
-	</script>
+		});
+	}
+</script>
 </body>
 
 </html>
