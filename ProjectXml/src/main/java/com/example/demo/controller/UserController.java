@@ -64,8 +64,12 @@ public class UserController {
 				listPostSave.add(post);
 			}
 		}
+		 model.addAttribute("listPost", listPostSave);
 		 
-		 List<Post> _listpost = listPostSave;
+		 List<Post> _listpost = new ArrayList<Post>();
+		 for (Post post1 : listPostSave) {
+			_listpost.add(post1);
+		}
 		 List<Post> listPostTrend = new ArrayList<Post>();
 		 
 		 if(_listpost.size()>3) {
@@ -84,17 +88,6 @@ public class UserController {
 			listPostTrend =  _listpost;
 		}
 		 
-		 
-		 
-		 for (Post po : listPostTrend) {
-			System.err.println(po);
-		}
-		 
-		 for (Post pos : listPostSave) {
-				System.err.println(pos);
-			}
-
-		 model.addAttribute("listPost", listPostSave);
 		 model.addAttribute("listPostTrend", listPostTrend);
 		
 		return "USER/index";
@@ -107,9 +100,7 @@ public class UserController {
 		        public int compare(Post o1, Post o2) {
 		            return o2.getDateupdate().compareTo(o1.getDateupdate()); }
 		    });
-		} }
-	
-	
+		} }	
 	
 	/**
 	 * select Post List User
