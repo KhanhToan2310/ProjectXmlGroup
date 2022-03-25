@@ -267,18 +267,12 @@ public class AdminController {
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
     	// get username on session
-    			String userNameLog = (String) request.getSession().getAttribute("username");
+    	Account acc = (Account) request.getSession().getAttribute("account");
 
-    			// find id's user by usernameLog
-    			List<Account> ListAccount = accountService.ReadListAccount();
+    			
     			// user id
-    			String userPostedId = "";
-    			for (Account account : ListAccount) {
-    				if (account.getUsername().equalsIgnoreCase(userNameLog)) {
-    					userPostedId = account.getId();
-
-    				}
-    			}
+    			String userPostedId = acc.getId();
+    			
     	
         Account account = accountService.findAccount(userPostedId);
         Map<String, String> selectRoleMap = selectRoleMap();

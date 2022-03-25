@@ -251,27 +251,22 @@ public class UserController {
         sortArray(list);
 
         // get username on session
-        String userNameLog = (String) request.getSession().getAttribute("username");
+        Account acc = (Account) request.getSession().getAttribute("account");
 
         // find id's user by usernameLog
         List<Account> ListAccount = accountService.ReadListAccount();
         // user id
-        String userPostedId = "";
-        for (Account account : ListAccount) {
-            if (account.getUsername().equalsIgnoreCase(userNameLog)) {
-                userPostedId = account.getId();
-
-            }
-        }
+        String userPostedId = acc.getId();
+        
 
         // get posts have condition
         for (Post post : list) {
             if (post.getUserid().equalsIgnoreCase(userPostedId) && "Y".equalsIgnoreCase(post.getIdisvisible())
                     && "2".equalsIgnoreCase(post.getStatusid())) {
 
-                Account acc = accountService.findAccount(post.getUserid());
-                if ((acc.getId()).equalsIgnoreCase(post.getUserid())) {
-                    post.setUserid(acc.getFullname());
+                Account acco = accountService.findAccount(post.getUserid());
+                if ((acco.getId()).equalsIgnoreCase(post.getUserid())) {
+                    post.setUserid(acco.getFullname());
                 }
                 listPostSave.add(post);
             }
@@ -314,18 +309,13 @@ public class UserController {
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
         // get username on session
-        String userNameLog = (String) request.getSession().getAttribute("username");
+    	Account acc = (Account) request.getSession().getAttribute("account");
 
         // find id's user by usernameLog
         List<Account> ListAccount = accountService.ReadListAccount();
         // user id
-        String userPostedId = "";
-        for (Account account : ListAccount) {
-            if (account.getUsername().equalsIgnoreCase(userNameLog)) {
-                userPostedId = account.getId();
-
-            }
-        }
+        String userPostedId = acc.getId();
+        
 
         Account account = accountService.findAccount(userPostedId);
         Map<String, String> selectRoleMap = selectRoleMap();
@@ -486,8 +476,6 @@ public class UserController {
             a.setRole("3");
             a.setIsactive("Y");
             a.setIsdelete("N");
-
-            System.err.println("alo: " + a);
 
             accountService.AddNewUser(a);
 
