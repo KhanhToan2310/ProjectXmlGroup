@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.JOptionPane;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.model.Account;
 import com.example.demo.model.Post;
 import com.example.demo.model.Result;
+import com.example.demo.model.Role;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.PostService;
 import com.example.demo.util.AccessUtil;
@@ -48,18 +50,12 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String checkLoginSessionUser(HttpServletRequest request, @ModelAttribute("account") Account account, ModelMap model)
 			throws Exception {
-//		Result result = AccessUtil.accessPage(request,"3");
-//		if (result.isValid()) {
-//			return "USER/index";
-//		}
-//		return result.getPath();
 		model.addAttribute("message", "");
-		String username = (String) request.getSession().getAttribute("username");
-		System.out.println("aaaaaaaaaa " + username);
-		if (username != null) {
+		Account acc = (Account) request.getSession().getAttribute("account");
+		if (acc.getUsername() != null) {
 			List<Account> listAccount = accountService.ReadListAccount();
 			for (Account a : listAccount) {
-				if (username.equals(a.getUsername())) {
+				if (acc.getUsername().equals(a.getUsername())) {
 					if (a.getRole() == "1")
 						return "redirect:/selectAccountList";
 					else if (a.getRole() == "2")
@@ -75,15 +71,9 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String loginAccountUser(HttpServletRequest request, @ModelAttribute("account") Account account,
 			ModelMap model) throws Exception {
-//		Result result = AccessUtil.login(request, account.getUsername(), account.getPassword());
-//		if (result.isValid())
-//			return result.getPath();
-//		else
-//			model.addAttribute("message", "Username or password incorrect. Please input again !");
-//		return "USER/sign-in";
 		for (Account a : accountService.ReadListAccount()) {
 			if(a.getUsername().equalsIgnoreCase(account.getUsername()) && a.getPassword().equalsIgnoreCase(account.getPassword()) ) {
-				request.getSession().setAttribute("username", account.getUsername());
+				request.getSession().setAttribute("account", account);
 				if (a.getRole() == "1")
 					return "redirect:/selectAccountList";
 				else if (a.getRole() == "2")
@@ -100,8 +90,7 @@ public class UserController {
 	@RequestMapping(value = "/logout")
 	public String logoutUser(HttpServletRequest request, @ModelAttribute("account") Account account,
 			ModelMap model) throws Exception {
-		request.getSession().removeAttribute("username");
-		System.out.println("aaaaaa " + request.getSession().getAttribute("username"));
+		request.getSession().removeAttribute("account");
 		return "redirect:/login";
 			}
 	/**
@@ -551,7 +540,6 @@ public class UserController {
     private Map<String, String> selectRoleMap() {
         Map<String, String> map = new HashMap<String, String>();
         List<Role> roles = roleService.ReadListRole();
-
         for (Role role : roles) {
             map.put(role.getId(), role.getName());
         }
