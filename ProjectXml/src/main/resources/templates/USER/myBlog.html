@@ -35,11 +35,11 @@
 												<br>
 											</p>
 											<div class="mt-2 mt-lg-auto">
-												<a onclick="updateLike(this)" style="color: red"  class="bi-heart-fill product-icon" th:idUser="${userPostedId}" th:id="${Post.id}" th:value="N" th:type="like" th:if="${Post.flg == 'Y'}" id="like" >
-													<p th:text="${#lists.size(Post.likes)}"></p>
-												</a> 
-												<a onclick="updateLike(this)" class="bi-heart-fill product-icon" th:idUser="${userPostedId}" th:id="${Post.id}" th:value="Y" th:type="unlike" id="like" th:if="${Post.flg == 'N'}">
-													<p th:text="${#lists.size(Post.likes)}"></p>
+												<a th:if="${#lists.contains(post.likes, userId)}" onclick="updateLike(this)" th:id="${post.id}" style="color: red;" class="bi-heart-fill product-icon" th:type="unlike">
+													<p th:text="${#lists.size(post.likes)}"></p>
+												</a>
+												<a th:if="${!#lists.contains(post.likes, userId)}" onclick="updateLike(this)" th:id="${post.id}" style="color: #EBEBEB" class="bi-heart-fill product-icon" th:type="like">
+													<p th:text="${#lists.size(post.likes)}"></p>
 												</a>
 												<br>
 												<a th:href="@{'/selectPostViewU?id='+ ${Post.id}}" href="product-detail.html" class="custom-link mb-2">View details <i class="bi-arrow-right ms-2"></i></a>
@@ -64,27 +64,29 @@
 	<script src="js/custom.js"></script>
 
 	<script type="text/javascript">
-		function updateLike(element) {
-			link = $(element);
-			var id = link.attr("id");
-			var idUser = link.attr("idUser");
-			var value = null;
-			var type = link.attr("type");
+	function updateLike(element) {
+		link = $(element);
+		var id = link.attr("id");
+		var type = link.attr("type");
 
-			var valCheckbox = '';
-			if (type == 'like') {
-				value = 'Y';
-			} else {
-				value = 'N';
-			}
-			$.ajax({
-				url : "./updatePostLikeAjax?id=" + id + "&idUser=" + idUser + "&value=" + value,
-				method : 'post',
-				async : false,
-				success : function(data) {
-				}
-			});
+		var valCheckbox = '';
+		if (type == 'like') {
+			value = 'Y';
+		} else {
+			value = 'N';
 		}
+
+		$.ajax({
+			url : "./updatePostLikeAjax?id=" + id + "&value=" + value,
+			method : 'post',
+			async : false,
+			success : function(data) {
+				if(data != null && data != ''){
+					location.reload();
+				}
+			}
+		});
+	}
 	</script>
 
 </body>

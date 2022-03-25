@@ -9,8 +9,11 @@ width: 100%; margin-right: 0px !important; margin-left: 0px !important; box-shad
 }
 .__img_custom{
 max-width: 100%;
-  height: auto;
-
+height: auto;
+}
+.__img_width{
+	width: auto !important;
+	align-items: center;
 }
 </style>
 	<section class="preloader">
@@ -22,7 +25,7 @@ max-width: 100%;
 		<div th:replace="navigationU :: nav_headerU"></div>
 		<section class="slick-slideshow">
 			<div class="slick-custom" th:each="postTrend : ${listPostTrend}">
-				<img th:src="${postTrend.img}" src="images\background.jpg" class="img-fluid" alt="">
+				<img th:src="${postTrend.img}"class="__img_custom __img_width" >
 				<div class="slick-bottom">
 					<div class="container">
 						<div class="row">
@@ -47,26 +50,29 @@ max-width: 100%;
 					<div class="col-lg-10 col-12">
 						<div class="tab-content mt-2" id="pills-tabContent">
 							<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-								<div class="row __rowCustom" th:each="Post : ${listPost}">
+								<div class="row __rowCustom" th:each="post : ${listPost}">
 									<div class="col-lg-4 col-12" style="display: flex; align-items: center;">
-										<img th:src="${Post.img}" class="__img_custom">
+										<img th:src="${post.img}" class="__img_custom">
 									</div>
 									<div class="col-lg-8 col-12">
 										<div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
-											<h1 style="font-size: 22px; font-weight: 600;" class="mb-3 "> Author: [[${Post.userid}]]</h1>
+											<h1 style="font-size: 22px; font-weight: 600;" class="mb-3 "> Author: [[${post.userid}]]</h1>
 											<div class="mb-3 date-create">
 												<p>2022/03/22</p>
 											</div>
-											<h4 class="mb-3" th:text="${Post.title}"></h4>
-											<p th:text="${Post.desription}" style="padding-bottom: 10px">
+											<h4 class="mb-3" th:text="${post.title}"></h4>
+											<p th:text="${post.desription}" style="padding-bottom: 10px">
 												<br>
 											</p>
 											<div class="mt-2 mt-lg-auto">
-												<a style="color: #EBEBEB;" class="bi-heart-fill product-icon" id="like" >
-													<p>1</p>
+												<a th:if="${#lists.contains(post.likes, userId)}" onclick="updateLike(this)" th:id="${post.id}" style="color: red;" class="bi-heart-fill product-icon" th:type="unlike">
+													<p th:text="${#lists.size(post.likes)}"></p>
+												</a>
+												<a th:if="${!#lists.contains(post.likes, userId)}" onclick="updateLike(this)" th:id="${post.id}" style="color: #EBEBEB" class="bi-heart-fill product-icon" th:type="like">
+													<p th:text="${#lists.size(post.likes)}"></p>
 												</a>
 												<br> 
-												<a th:href="@{'/selectPostViewU?id='+ ${Post.id}}" href="product-detail.html" class="custom-link mb-2">
+												<a th:href="@{'/selectPostViewU?id='+ ${post.id}}" href="product-detail.html" class="custom-link mb-2">
 													View details <i class="bi-arrow-right ms-2"></i>
 												</a>
 											</div>
@@ -94,8 +100,6 @@ max-width: 100%;
 		function updateLike(element) {
 			link = $(element);
 			var id = link.attr("id");
-			var idUser = link.attr("idUser");
-			var value = null;
 			var type = link.attr("type");
 
 			var valCheckbox = '';
@@ -106,12 +110,13 @@ max-width: 100%;
 			}
 
 			$.ajax({
-				url : "./updatePostLikeAjax?id=" + id + "&idUser="
-						+ idUser + "&value=" + value,
+				url : "./updatePostLikeAjax?id=" + id + "&value=" + value,
 				method : 'post',
 				async : false,
 				success : function(data) {
-					
+					if(data != null && data != ''){
+						location.reload();
+					}
 				}
 			});
 		}
