@@ -85,7 +85,11 @@
 											<tr th:each="result,state : ${resultList}">
 												<td th:text="${state.index + 1}"></td>
 												<td><a th:href="@{'/selectPostView?id='+ ${result.id}}" th:text="${result.title}" style="color: black;text-decoration:underline;"></a></td>
-												<td th:text="${result.datecreate}"></td>
+												<td>
+													<span th:text="${#strings.substring(result.datecreate,0,4)}"></span>/
+													<span th:text="${#strings.substring(result.datecreate,4,6)}"></span>/
+													<span th:text="${#strings.substring(result.datecreate,6,8)}"></span>
+												</td>
 												<td th:text="${statusMap[result.statusid]}"></td>
 												<td>
 													<label class="switch"> 
