@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,74 +27,83 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.Account;
 import com.example.demo.model.Post;
+import com.example.demo.model.Result;
 import com.example.demo.model.Role;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.PostService;
+import com.example.demo.util.AccessUtil;
 import com.example.demo.service.RoleService;
 import com.example.demo.util.DateUtil;
 
 @Controller
 public class UserController {
 
-	@Autowired
-	private AccountService accountService;
+    @Autowired
+    private AccountService accountService;
 
-	@Autowired
-	private PostService postService;
+    @Autowired
+    private PostService postService;
 
-	@Autowired
-	private RoleService roleService;
-	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String checkLoginSession(HttpServletRequest request, @ModelAttribute("account") Account account)
-			throws Exception {
-		String username = (String) request.getSession().getAttribute("username");
-		if (username != null) {
-			List<Account> listAccount = accountService.ReadListAccount();
-			for (Account a : listAccount) {
-				if (username.equals(a.getUsername())) {
-					if (a.getRole() == "1")
-						return "ADMIN/tablesAccounts";
-					else if (a.getRole() == "2")
-						return "ADMIN/postList";
-					else
-						return "USER/index";
-				}
-			}
-		}
-		return "USER/sign-in";
-	}
+    @Autowired
+    private RoleService roleService;
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String loginAccount(HttpServletRequest request, @ModelAttribute("account") Account account, ModelMap model)
-			throws Exception {
-		for (Account a : accountService.ReadListAccount()) {
-			if (a.getUsername().equalsIgnoreCase(account.getUsername().trim())
-					&& a.getPassword().equalsIgnoreCase(account.getPassword().trim())) {
-				request.getSession().setAttribute("username", account.getUsername().trim());
-				if (a.getRole() == "1")
-					return "ADMIN/tablesAccounts";
-				else if (a.getRole() == "2")
-					return "ADMIN/postList";
-				else
-					return "redirect:/selectPostListU";
-			} else {
-				model.addAttribute("message", "Username or password incorrect. Please input again !");
-			}
-		}
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String checkLoginSessionUser(HttpServletRequest request, @ModelAttribute("account") Account account,
+            ModelMap model) throws Exception {
+        model.addAttribute("message", "");
+        Account acc = (Account) request.getSession().getAttribute("account");
+        if (acc != null) {
+            List<Account> listAccount = accountService.ReadListAccount();
+            for (Account a : listAccount) {
+                if (acc.getUsername().equals(a.getUsername())) {
+                    if (a.getRole() == "1")
+                        return "redirect:/selectAccountList";
+                    else if (a.getRole() == "2")
+                        return "redirect:/selectPostList";
+                    else
+                        return "redirect:/selectPostListU";
+                }
+            }
+        }
+        return "USER/sign-in";
+    }
 
-		return "USER/sign-in";
-	}
-	
-	/**
-	 * register
-	 * 
-	 * @param model
-	 * @param HttpServletRequest
-	 * @return String
-	 * @throws Exception
-	 */
-	@RequestMapping("/register")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String loginAccountUser(HttpServletRequest request, @ModelAttribute("account") Account account,
+            ModelMap model) throws Exception {
+        for (Account a : accountService.ReadListAccount()) {
+            if (a.getUsername().equalsIgnoreCase(account.getUsername())
+                    && a.getPassword().equalsIgnoreCase(account.getPassword())) {
+                request.getSession().setAttribute("account", a);
+                if (a.getRole() == "1")
+                    return "redirect:/selectAccountList";
+                else if (a.getRole() == "2")
+                    return "redirect:/selectPostList";
+                else
+                    return "redirect:/selectPostListU";
+            } else {
+                model.addAttribute("message", "Username or password incorrect. Please input again !");
+            }
+        }
+        return "redirect:/login";
+    }
+
+    @RequestMapping(value = "/logout")
+    public String logoutUser(HttpServletRequest request, @ModelAttribute("account") Account account, ModelMap model)
+            throws Exception {
+        request.getSession().removeAttribute("account");
+        return "redirect:/login";
+    }
+
+    /**
+     * register
+     * 
+     * @param model
+     * @param HttpServletRequest
+     * @return String
+     * @throws Exception
+     */
+    @RequestMapping("/register")
 	public String addAccount(ModelMap model)
 			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
@@ -110,299 +118,263 @@ public class UserController {
 		return "USER/sign-up";
 	}
 
-	/**
-	 * select Post List User
-	 * 
-	 * @param model
-	 * @param HttpServletRequest
-	 * @return String
-	 * @throws Exception
-	 */
-	@RequestMapping("/selectPostListU")
-	public String selectPostListU(ModelMap model, HttpServletRequest request)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+    /**
+     * select Post List User
+     * 
+     * @param model
+     * @param HttpServletRequest
+     * @return String
+     * @throws Exception
+     */
+    @RequestMapping("/selectPostListU")
+    public String selectPostListU(ModelMap model, HttpServletRequest request)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-		// read list post from data xml
-		// sort list post by date update
-		// add list post on model
-		List<Post> list = postService.readListPost();
-		List<Post> listPostSave = new ArrayList<>();
+        // read list post from data xml
+        // sort list post by date update
+        // add list post on model
+        List<Post> list = postService.readListPost();
+        List<Post> listPostSave = new ArrayList<>();
 
-		sortArray(list);
+        sortArray(list);
 
-		for (Post post : list) {
-			if ("Y".equalsIgnoreCase(post.getIdisvisible()) && "2".equalsIgnoreCase(post.getStatusid())) {
+        for (Post post : list) {
+            if ("Y".equalsIgnoreCase(post.getIdisvisible()) && "2".equalsIgnoreCase(post.getStatusid())) {
 
-				Account acc = accountService.findAccount(post.getUserid());
-				if ((acc.getId()).equalsIgnoreCase(post.getUserid())) {
-					post.setUserid(acc.getFullname());
-				}
-				listPostSave.add(post);
-			}
-		}
+                Account acc = accountService.findAccount(post.getUserid());
+                if ((acc.getId()).equalsIgnoreCase(post.getUserid())) {
+                    post.setUserid(acc.getFullname());
+                }
+                listPostSave.add(post);
+            }
+        }
 
-		String userNameLog = (String) request.getSession().getAttribute("username");
+        Account acc = (Account) request.getSession().getAttribute("account");
 
-		List<Account> ListAccount = accountService.ReadListAccount();
-		String userPostedId = "";
-		for (Account account : ListAccount) {
-			if (account.getUsername().equalsIgnoreCase(userNameLog)) {
-				userPostedId = account.getId();
+        model.addAttribute("userId", acc.getId());
+        model.addAttribute("listPost", listPostSave);
 
-			}
-		}
+        List<Post> _listpost = new ArrayList<Post>();
+        for (Post post1 : listPostSave) {
+            _listpost.add(post1);
+        }
+        List<Post> listPostTrend = new ArrayList<Post>();
 
-		for (Post post : listPostSave) {
-			for (String likes : post.getLikes()) {
-				if (likes.equals(userPostedId)) {
-					post.setFlg("Y");
-					break;
-				} else {
-					post.setFlg("N");
-				}
+        if (_listpost.size() > 3) {
+            for (int i = 0; i < 3; i++) {
+                Post _post = _listpost.get(0);
+                for (Post p : _listpost) {
+                    if ((p.getLikes().size()) > (_post.getLikes().size())) {
+                        _post = p;
+                    }
+                }
+                _listpost.remove(_post);
+                listPostTrend.add(_post);
 
-			}
-		}
-		model.addAttribute("listPost", listPostSave);
+            }
+        } else {
+            listPostTrend = _listpost;
+        }
 
-		List<Post> _listpost = new ArrayList<Post>();
-		for (Post post1 : listPostSave) {
-			_listpost.add(post1);
-		}
-		List<Post> listPostTrend = new ArrayList<Post>();
+        model.addAttribute("listPostTrend", listPostTrend);
 
-		if (_listpost.size() > 3) {
-			for (int i = 0; i < 3; i++) {
-				Post _post = _listpost.get(0);
-				for (Post p : _listpost) {
-					if ((p.getLikes().size()) > (_post.getLikes().size())) {
-						_post = p;
-					}
-				}
-				_listpost.remove(_post);
-				listPostTrend.add(_post);
+        return "USER/index";
+    }
 
-			}
-		} else {
-			listPostTrend = _listpost;
-		}
+    /**
+     * sort array funtion
+     * 
+     * @param List
+     * @return void
+     */
 
-		model.addAttribute("userPostedId", userPostedId);
-		model.addAttribute("listPostTrend", listPostTrend);
+    private void sortArray(List<Post> arrayList) {
+        if (arrayList != null) {
+            Collections.sort(arrayList, new Comparator<Post>() {
+                @Override
+                public int compare(Post o1, Post o2) {
+                    return o2.getDateupdate().compareTo(o1.getDateupdate());
+                }
+            });
+        }
+    }
 
-		return "USER/index";
-	}
+    /**
+     * select Post List User
+     * 
+     * @param id
+     * @param model
+     * @return String
+     * @throws Exception
+     */
+    @RequestMapping("/selectPostViewU")
+    public String selectPostListUser(ModelMap model, @RequestParam String id, HttpServletRequest request)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-	/**
-	 * sort array funtion
-	 * 
-	 * @param List
-	 * @return void
-	 */
+        List<Post> list = postService.readListPost();
+        Post postSave = new Post();
 
-	private void sortArray(List<Post> arrayList) {
-		if (arrayList != null) {
-			Collections.sort(arrayList, new Comparator<Post>() {
-				@Override
-				public int compare(Post o1, Post o2) {
-					return o2.getDateupdate().compareTo(o1.getDateupdate());
-				}
-			});
-		}
-	}
+        for (Post post : list) {
+            if ((post.getId()).equalsIgnoreCase(id)) {
+                Account acc = accountService.findAccount(post.getUserid());
+                if ((acc.getId()).equalsIgnoreCase(post.getUserid())) {
+                    post.setUserid(acc.getFullname());
+                }
+                postSave = post;
+            }
+        }
 
-	/**
-	 * select Post List User
-	 * 
-	 * @param id
-	 * @param model
-	 * @return String
-	 * @throws Exception
-	 */
-	@RequestMapping("/selectPostViewU")
-	public String selectPostListUser(ModelMap model, @RequestParam String id)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+        Account acc = (Account) request.getSession().getAttribute("account");
 
-		List<Post> list = postService.readListPost();
-		Post postSave = new Post();
+        model.addAttribute("userId", acc.getId());
+        model.addAttribute("post", postSave);
 
-		for (Post post : list) {
-			if ((post.getId()).equalsIgnoreCase(id)) {
-				Account acc = accountService.findAccount(post.getUserid());
-				if ((acc.getId()).equalsIgnoreCase(post.getUserid())) {
-					post.setUserid(acc.getFullname());
-				}
-				postSave = post;
-			}
-		}
+        return "USER/product-detail";
+    }
 
-		model.addAttribute("post", postSave);
+    /**
+     * select Post List Of User
+     * 
+     * @param HttpServletRequest
+     * @param model
+     * @return String
+     * @throws Exception
+     */
+    @RequestMapping("/selectPostViewOfU")
+    public String selectPostListOfUser(ModelMap model, HttpServletRequest request)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-		return "USER/product-detail";
-	}
+        List<Post> list = postService.readListPost();
+        List<Post> listPostSave = new ArrayList<>();
 
-	/**
-	 * select Post List Of User
-	 * 
-	 * @param HttpServletRequest
-	 * @param model
-	 * @return String
-	 * @throws Exception
-	 */
-	@RequestMapping("/selectPostViewOfU")
-	public String selectPostListOfUser(ModelMap model, HttpServletRequest request)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+        // sort list post by date update
+        sortArray(list);
 
-		List<Post> list = postService.readListPost();
-		List<Post> listPostSave = new ArrayList<>();
+        // get username on session
+        String userNameLog = (String) request.getSession().getAttribute("username");
 
-		// sort list post by date update
-		sortArray(list);
+        // find id's user by usernameLog
+        List<Account> ListAccount = accountService.ReadListAccount();
+        // user id
+        String userPostedId = "";
+        for (Account account : ListAccount) {
+            if (account.getUsername().equalsIgnoreCase(userNameLog)) {
+                userPostedId = account.getId();
 
-		// get username on session
-		String userNameLog = (String) request.getSession().getAttribute("username");
+            }
+        }
 
-		// find id's user by usernameLog
-		List<Account> ListAccount = accountService.ReadListAccount();
-		// user id
-		String userPostedId = "";
-		for (Account account : ListAccount) {
-			if (account.getUsername().equalsIgnoreCase(userNameLog)) {
-				userPostedId = account.getId();
+        // get posts have condition
+        for (Post post : list) {
+            if (post.getUserid().equalsIgnoreCase(userPostedId) && "Y".equalsIgnoreCase(post.getIdisvisible())
+                    && "2".equalsIgnoreCase(post.getStatusid())) {
 
-			}
-		}
+                Account acc = accountService.findAccount(post.getUserid());
+                if ((acc.getId()).equalsIgnoreCase(post.getUserid())) {
+                    post.setUserid(acc.getFullname());
+                }
+                listPostSave.add(post);
+            }
+        }
 
-		// get posts have condition
-		for (Post post : list) {
-			if (post.getUserid().equalsIgnoreCase(userPostedId) && "Y".equalsIgnoreCase(post.getIdisvisible())
-					&& "2".equalsIgnoreCase(post.getStatusid())) {
+        // set likes
+        for (Post post : listPostSave) {
+            for (String likes : post.getLikes()) {
+                if (likes.equals(userPostedId)) {
+                    post.setFlg("Y");
+                    break;
+                } else {
+                    post.setFlg("N");
+                }
 
-				Account acc = accountService.findAccount(post.getUserid());
-				if ((acc.getId()).equalsIgnoreCase(post.getUserid())) {
-					post.setUserid(acc.getFullname());
-				}
-				listPostSave.add(post);
-			}
-		}
+            }
+        }
+        model.addAttribute("listPost", listPostSave);
 
-		// set likes
-		for (Post post : listPostSave) {
-			for (String likes : post.getLikes()) {
-				if (likes.equals(userPostedId)) {
-					post.setFlg("Y");
-					break;
-				} else {
-					post.setFlg("N");
-				}
+        List<Post> _listpost = new ArrayList<Post>();
+        for (Post post1 : listPostSave) {
+            _listpost.add(post1);
+        }
 
-			}
-		}
-		model.addAttribute("listPost", listPostSave);
+        model.addAttribute("userPostedId", userPostedId);
 
-		List<Post> _listpost = new ArrayList<Post>();
-		for (Post post1 : listPostSave) {
-			_listpost.add(post1);
-		}
+        return "USER/myBlog";
+    }
 
-		model.addAttribute("userPostedId", userPostedId);
+    /**
+     * select Account View User
+     * 
+     * @param HttpServletRequest
+     * @param model
+     * @return String
+     * @throws Exception
+     */
+    @RequestMapping("/selectAccountU")
+    public String selectAccountviewU(ModelMap model, HttpServletRequest request)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-		return "USER/myBlog";
-	}
+        // get username on session
+        String userNameLog = (String) request.getSession().getAttribute("username");
 
-	/**
-	 * select Account View User
-	 * 
-	 * @param HttpServletRequest
-	 * @param model
-	 * @return String
-	 * @throws Exception
-	 */
-	@RequestMapping("/selectAccountU")
-	public String selectAccountviewU(ModelMap model, HttpServletRequest request)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+        // find id's user by usernameLog
+        List<Account> ListAccount = accountService.ReadListAccount();
+        // user id
+        String userPostedId = "";
+        for (Account account : ListAccount) {
+            if (account.getUsername().equalsIgnoreCase(userNameLog)) {
+                userPostedId = account.getId();
 
-		// get username on session
-		String userNameLog = (String) request.getSession().getAttribute("username");
+            }
+        }
 
-		// find id's user by usernameLog
-		List<Account> ListAccount = accountService.ReadListAccount();
-		// user id
-		String userPostedId = "";
-		for (Account account : ListAccount) {
-			if (account.getUsername().equalsIgnoreCase(userNameLog)) {
-				userPostedId = account.getId();
+        Account account = accountService.findAccount(userPostedId);
+        Map<String, String> selectRoleMap = selectRoleMap();
 
-			}
-		}
+        model.addAttribute("selectRoleMap", selectRoleMap);
+        model.addAttribute("account", account);
 
-		Account account = accountService.findAccount(userPostedId);
-		Map<String, String> selectRoleMap = selectRoleMap();
+        return "USER/accountForm";
+    }
 
-		model.addAttribute("selectRoleMap", selectRoleMap);
-		model.addAttribute("account", account);
+    /**
+     * update Post Like Ajax
+     * 
+     * @param id
+     * @param valCheckbox
+     * @param value
+     * @return
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updatePostLikeAjax")
+    public String updatePostLike(@RequestParam String id, @RequestParam String value, HttpServletRequest request)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-		return "USER/accountForm";
-	}
+        List<Post> list = postService.readListPost();
+        Account acc = (Account) request.getSession().getAttribute("account");
 
-	/**
-	 * update Post Like Ajax
-	 * 
-	 * @param id
-	 * @param valCheckbox
-	 * @param value
-	 * @return
-	 * @throws FileNotFoundException
-	 * @throws UnsupportedEncodingException
-	 * @throws XMLStreamException
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/updatePostLikeAjax")
-	public String updatePostLike(@RequestParam String id, @RequestParam String idUser, @RequestParam String value)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+        for (Post post : list) {
+            if (post.getId().equalsIgnoreCase(id)) {
+                List<String> likes = post.getLikes();
 
-		System.err.println("alo: " + id + ", " + idUser + ", " + value);
+                if ("Y".equals(value)) {
+                    likes.add(acc.getId());
+                } else {
+                    likes.remove(acc.getId());
+                }
 
-		List<Post> list = postService.readListPost();
+                post.setLikes(likes);
+                postService.updatePosts(post);
+            }
+        }
 
-		for (Post post : list) {
-			if (post.getId().equalsIgnoreCase(id)) {
-				List<String> likes = post.getLikes();
+        return "OK";
+    }
 
-				for (String like : likes) {
-					// remove on likes
-					if (value.equalsIgnoreCase("N")) {
-
-						if (!like.equalsIgnoreCase(idUser)) {
-							post.setFlg("Y");
-							likes.add(idUser);
-							post.setLikes(likes);
-							System.err.println("alo: " + post);
-							postService.updatePosts(post);
-						}
-
-					}
-					// add on likes
-					else {
-						if (like.equalsIgnoreCase(idUser)) {
-							post.setFlg("N");
-							likes.remove(like);
-							post.setLikes(likes);
-							System.err.println("alo: " + post);
-							postService.updatePosts(post);
-						}
-					}
-				}
-			}
-
-		}
-
-		return "redirect:/selectPostListU";
-	}
-	
-	
-	/**
-     * update Account  User
+    /**
+     * update Account User
      * 
      * @param id
      * @param phone
@@ -467,7 +439,7 @@ public class UserController {
 
         return "USER/accountForm";
     }
-    
+
     /**
      * register
      * 
@@ -485,8 +457,8 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/registered")
     public String registertd(@RequestParam String username, @RequestParam String phone, @RequestParam String email,
-            @RequestParam String age, @RequestParam String birthday, @RequestParam String password, RedirectAttributes redirAttrs,
-            @RequestParam(name = "fullname", required = false) String fullname)
+            @RequestParam String age, @RequestParam String birthday, @RequestParam String password,
+            RedirectAttributes redirAttrs, @RequestParam(name = "fullname", required = false) String fullname)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
         List<Account> resultList = accountService.ReadListAccount();
@@ -495,40 +467,36 @@ public class UserController {
 
         for (Account account : resultList) {
             if (account.getUsername().equalsIgnoreCase(username)) {
-            	flag = false;
-            	break;
-            }else {
-            	flag = true;
-			}
-            
+                flag = false;
+                break;
+            } else {
+                flag = true;
+            }
+
         }
-        
+
         if (flag == true) {
-        	a.setUsername(username);
-        	a.setPassword(password);
-        	a.setPhone(phone);
-        	a.setEmail(email);
-        	a.setAge(age);
-        	a.setBirthday(birthday);
-        	a.setFullname(fullname);
-        	a.setRole("3");
-        	a.setIsactive("Y");
-        	a.setIsdelete("N");
-        	
-        	System.err.println("alo: "+a);
-        	
+            a.setUsername(username);
+            a.setPassword(password);
+            a.setPhone(phone);
+            a.setEmail(email);
+            a.setAge(age);
+            a.setBirthday(birthday);
+            a.setFullname(fullname);
+            a.setRole("3");
+            a.setIsactive("Y");
+            a.setIsdelete("N");
+
+            System.err.println("alo: " + a);
+
             accountService.AddNewUser(a);
-           
-            
-            
-            
-		}
-        
+
+        }
+
         return null;
     }
-	
-	
-	/**
+
+    /**
      * select Role Map
      * 
      * @return Map<String, String>
@@ -536,7 +504,6 @@ public class UserController {
     private Map<String, String> selectRoleMap() {
         Map<String, String> map = new HashMap<String, String>();
         List<Role> roles = roleService.ReadListRole();
-
         for (Role role : roles) {
             map.put(role.getId(), role.getName());
         }
