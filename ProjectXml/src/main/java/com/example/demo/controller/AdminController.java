@@ -60,10 +60,6 @@ public class AdminController {
         try {
             List<Post> resultList = postService.readListPost();
 
-            for (Post post : resultList) {
-                post.setDatecreate(DateUtil.getDateFormat("yyyy-MM-dd"));
-            }
-
             model.addAttribute("resultList", resultList);
         } catch (FileNotFoundException | UnsupportedEncodingException | XMLStreamException e) {
             throw new Exception("Lỗi");
