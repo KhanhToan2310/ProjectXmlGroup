@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.xml.stream.XMLStreamException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.Account;
 import com.example.demo.model.Post;
@@ -82,6 +85,25 @@ public class UserController {
 		}
 
 		return "USER/sign-in";
+	}
+	
+	/**
+	 * register
+	 * 
+	 * @param model
+	 * @param HttpServletRequest
+	 * @return String
+	 * @throws Exception
+	 */
+	@RequestMapping("/register")
+	public String addAccount(ModelMap model)
+			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+		List<Account> list = accountService.ReadListAccount();
+		
+		model.addAttribute("accounts",list);
+
+		return "USER/sign-up";
 	}
 
 	/**
@@ -440,6 +462,65 @@ public class UserController {
         }
 
         return "USER/accountForm";
+    }
+    
+    /**
+     * register
+     * 
+     * @param username
+     * @param phone
+     * @param email
+     * @param age
+     * @param birthday
+     * @param fullname
+     * @return null
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     * @throws XMLStreamException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/registered")
+    public String registertd(@RequestParam String username, @RequestParam String phone, @RequestParam String email,
+            @RequestParam String age, @RequestParam String birthday, @RequestParam String password, RedirectAttributes redirAttrs,
+            @RequestParam(name = "fullname", required = false) String fullname)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+        List<Account> resultList = accountService.ReadListAccount();
+        Account a = new Account();
+        boolean flag = false;
+
+        for (Account account : resultList) {
+            if (account.getUsername().equalsIgnoreCase(username)) {
+            	flag = false;
+            	break;
+            }else {
+            	flag = true;
+			}
+            
+        }
+        
+        if (flag == true) {
+        	a.setUsername(username);
+        	a.setPassword(password);
+        	a.setPhone(phone);
+        	a.setEmail(email);
+        	a.setAge(age);
+        	a.setBirthday(birthday);
+        	a.setFullname(fullname);
+        	a.setRole("3");
+        	a.setIsactive("Y");
+        	a.setIsdelete("N");
+        	
+        	System.err.println("alo: "+a);
+        	
+            accountService.AddNewUser(a);
+           
+            
+            
+            
+		}
+        
+        return null;
     }
 	
 	
