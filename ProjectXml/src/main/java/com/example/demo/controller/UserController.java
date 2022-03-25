@@ -100,8 +100,12 @@ public class UserController {
 			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
 		List<Account> list = accountService.ReadListAccount();
+		List<String> usernameSave = new ArrayList<String>();
+		for (Account account : list) {
+			usernameSave.add(account.getUsername());
+		}
 		
-		model.addAttribute("accounts",list);
+		model.addAttribute("accounts",usernameSave);
 
 		return "USER/sign-up";
 	}

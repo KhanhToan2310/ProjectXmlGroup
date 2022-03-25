@@ -354,6 +354,49 @@ public class AdminController {
 
         return null;
     }
+    
+    /**
+     * delete Form View
+     * 
+     * @param model
+     * @param HttpServletRequest
+     * @return String
+     * @throws XMLStreamException
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * @throws Exception
+     */
+    @RequestMapping(value = "/deleteFormView")
+    public String deleteFormView()
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+    	
+    	
+        return "ADMIN/examples/deleteForm";
+    }
+    
+    /**
+     * delete Action
+     * 
+     * @param model
+     * @param HttpServletRequest
+     * @return String
+     * @throws XMLStreamException
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = "/deleteAction")
+    public String deleteAction()
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+    	accountService.DeleteUser();
+    	postService.deletePosts();
+
+        return "ok";
+    }
+    
 
     /**
      * select Role Map
