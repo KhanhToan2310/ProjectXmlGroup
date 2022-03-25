@@ -23,7 +23,7 @@ height: auto;
 						<h2 class="mb-5">
 							<span>List blog</span>
 							<br>
-							<a href="#" type="button" class="btn btn-outline-secondary">+ Add new</a>
+							<a href="/create-post" type="button" class="btn btn-outline-secondary">+ Add new</a>
 						</h2>
 					</div>
 					<div class="col-lg-10 col-12">
@@ -52,6 +52,7 @@ height: auto;
 												</a>
 												<br>
 												<a th:href="@{'/selectPostViewU?id='+ ${Post.id}}" href="product-detail.html" class="custom-link mb-2">View details <i class="bi-arrow-right ms-2"></i></a>
+												<a th:href="@{'/edit-post?id='+ ${Post.id}}" href="product-detail.html" class="custom-link mb-2">Edit post <i class="bi-arrow-right ms-2"></i></a>
 											</div>
 										</div>
 									</div>
