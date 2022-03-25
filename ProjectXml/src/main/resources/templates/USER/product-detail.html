@@ -21,7 +21,7 @@
 								</div>
 								<div class="top">
 									<p th:text="${post.userid}" ></p>
-									<p th:text="${post.datecreate}"></p>
+									<!-- <p th:text="${post.datecreate}"></p> -->
 									<a th:if="${#lists.contains(post.likes, userId)}" onclick="updateLike(this)" th:id="${post.id}" style="color: red;" class="bi-heart-fill product-icon" th:type="unlike">
 										<p th:text="${#lists.size(post.likes)}"></p>
 									</a>
@@ -34,11 +34,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-12 col-12">
-					<div class="product-description">
-						<p th:text="${post.desription}" class="lead mb-5"></p>
-					</div>
-				</div>
+				
 			</div>
 			</div>
 		</section>

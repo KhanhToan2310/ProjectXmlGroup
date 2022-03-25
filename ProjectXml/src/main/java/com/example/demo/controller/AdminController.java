@@ -267,18 +267,12 @@ public class AdminController {
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
     	// get username on session
-    			String userNameLog = (String) request.getSession().getAttribute("username");
+    	Account acc = (Account) request.getSession().getAttribute("account");
 
-    			// find id's user by usernameLog
-    			List<Account> ListAccount = accountService.ReadListAccount();
+    			
     			// user id
-    			String userPostedId = "";
-    			for (Account account : ListAccount) {
-    				if (account.getUsername().equalsIgnoreCase(userNameLog)) {
-    					userPostedId = account.getId();
-
-    				}
-    			}
+    			String userPostedId = acc.getId();
+    			
     	
         Account account = accountService.findAccount(userPostedId);
         Map<String, String> selectRoleMap = selectRoleMap();
@@ -354,6 +348,49 @@ public class AdminController {
 
         return null;
     }
+    
+    /**
+     * delete Form View
+     * 
+     * @param model
+     * @param HttpServletRequest
+     * @return String
+     * @throws XMLStreamException
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * @throws Exception
+     */
+    @RequestMapping(value = "/deleteFormView")
+    public String deleteFormView()
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+    	
+    	
+        return "ADMIN/examples/deleteForm";
+    }
+    
+    /**
+     * delete Action
+     * 
+     * @param model
+     * @param HttpServletRequest
+     * @return String
+     * @throws XMLStreamException
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = "/deleteAction")
+    public String deleteAction()
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+    	accountService.DeleteUser();
+    	postService.deletePosts();
+
+        return "ok";
+    }
+    
 
     /**
      * select Role Map
