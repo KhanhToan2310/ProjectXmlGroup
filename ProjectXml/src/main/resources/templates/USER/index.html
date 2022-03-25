@@ -1,105 +1,83 @@
 <head th:replace="fragmentU :: headerU_link('User - HomePage')" />
 <body>
+<style>
+.__rowCustom{
+width: 100%; margin-right: 0px !important; margin-left: 0px !important; box-shadow: 6px 6px 18px 4px rgb(0 0 0/ 70%); margin-bottom: 5%; border-radius: 10px;
+}
+.mt-2 .mt-lg-auto a.bi-heart-fill.product-icon{
+	margin-left: 0px !important;
+}
+.__img_custom{
+max-width: 100%;
+  height: auto;
+
+}
+</style>
 	<section class="preloader">
 		<div class="spinner">
 			<span class="sk-inner-circle"></span>
 		</div>
 	</section>
-
 	<main>
-
 		<div th:replace="navigationU :: nav_headerU"></div>
-
 		<section class="slick-slideshow">
-
 			<div class="slick-custom" th:each="postTrend : ${listPostTrend}">
-				<img th:src="${postTrend.img}" src="images\background.jpg"
-					class="img-fluid" alt="">
-
+				<img th:src="${postTrend.img}" src="images\background.jpg" class="img-fluid" alt="">
 				<div class="slick-bottom">
 					<div class="container">
 						<div class="row">
 							<div class="col-lg-6 col-10">
 								<h1 th:text="${postTrend.title}" class="slick-title">Blog 1</h1>
-
-								<p th:text="${postTrend.desription}"
-									class="lead text-white mt-lg-3 mb-lg-5">Content blog
-									1111111</p>
-
-								<a th:href="@{'/selectPostViewU?id='+ ${postTrend.id}}"
-									href="about.html" class="btn custom-btn">View blog</a>
+								<p th:text="${postTrend.desription}" class="lead text-white mt-lg-3 mb-lg-5">Content blog 1111111</p>
+								<a th:href="@{'/selectPostViewU?id='+ ${postTrend.id}}" href="about.html" class="btn custom-btn">View blog</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</section>
-
 		<section class="about section-padding">
 			<div class="container">
 				<div class="row">
-
 					<div class="col-12 text-center">
 						<h2 class="mb-5">
 							<span>List blog</span>
 						</h2>
 					</div>
-
 					<div class="col-lg-10 col-12">
 						<div class="tab-content mt-2" id="pills-tabContent">
-							<div class="tab-pane fade show active" id="pills-home"
-								role="tabpanel" aria-labelledby="pills-home-tab">
-
-								<div class="row" th:each="Post : ${listPost}"
-									style="width: 100%; margin-right: 0px !important; margin-left: 0px !important; box-shadow: 6px 6px 18px 4px rgb(0 0 0/ 70%); margin-bottom: 5%; border-radius: 10px;">
-									<div class="col-lg-4 col-12"
-										style="display: flex; align-items: center;">
-										<img th:src="${Post.img}"
-											src="images\product\image_product.jpg" class="img-fluid"
-											alt="">
+							<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+								<div class="row __rowCustom" th:each="Post : ${listPost}">
+									<div class="col-lg-4 col-12" style="display: flex; align-items: center;">
+										<img th:src="${Post.img}" class="__img_custom">
 									</div>
-
 									<div class="col-lg-8 col-12">
 										<div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
-											<h1 style="font-size: 22px; font-weight: 600;" class="mb-3 "
-												th:text="${Post.userid}"></h1>
+											<h1 style="font-size: 22px; font-weight: 600;" class="mb-3 "> Author: [[${Post.userid}]]</h1>
 											<div class="mb-3 date-create">
 												<p>2022/03/22</p>
 											</div>
 											<h4 class="mb-3" th:text="${Post.title}"></h4>
-											<p th:text="${Post.desription}">
+											<p th:text="${Post.desription}" style="padding-bottom: 10px">
 												<br>
 											</p>
 											<div class="mt-2 mt-lg-auto">
-												<a onclick="updateLike(this)" style="color: red" 
-													class="bi-heart-fill product-icon"
-													th:idUser="${userPostedId}"
-													th:id="${Post.id}"
-													th:value="N"
-													th:type="like"
-													th:if="${Post.flg == 'Y'}" id="like" >
-													<p th:text="${#lists.size(Post.likes)}"></p>
-												</a> 
-												<a onclick="updateLike(this)" 
-													class="bi-heart-fill product-icon"
-													th:idUser="${userPostedId}"
-													th:id="${Post.id}"
-													th:value="Y"
-													th:type="unlike"
-													id="like"
-													th:if="${Post.flg == 'N'}">
-													<p th:text="${#lists.size(Post.likes)}"></p>
-												</a> <br> <a
-													th:href="@{'/selectPostViewU?id='+ ${Post.id}}"
-													href="product-detail.html" class="custom-link mb-2">
+												<a style="color: #EBEBEB;" class="bi-heart-fill product-icon" id="like" >
+													<p>1</p>
+												</a>
+												<br> 
+												<a th:href="@{'/selectPostViewU?id='+ ${Post.id}}" href="product-detail.html" class="custom-link mb-2">
 													View details <i class="bi-arrow-right ms-2"></i>
 												</a>
 											</div>
 										</div>
 									</div>
-
 								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</section>
 	</main>
 	<footer th:replace="fragmentU :: footerU"></footer>
