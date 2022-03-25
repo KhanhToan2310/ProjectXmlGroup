@@ -10,31 +10,7 @@
 
 		<div th:replace="navigationU :: nav_headerU"></div>
 
-		<section class="slick-slideshow">
-
-			<div class="slick-custom" th:each="postTrend : ${listPostTrend}">
-				<img th:src="${postTrend.img}" src="images\background.jpg"
-					class="img-fluid" alt="">
-
-				<div class="slick-bottom">
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-6 col-10">
-								<h1 th:text="${postTrend.title}" class="slick-title">Blog 1</h1>
-
-								<p th:text="${postTrend.desription}"
-									class="lead text-white mt-lg-3 mb-lg-5">Content blog
-									1111111</p>
-
-								<a th:href="@{'/selectPostViewU?id='+ ${postTrend.id}}"
-									href="about.html" class="btn custom-btn">View blog</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		</section>
+		
 
 		<section class="about section-padding">
 			<div class="container">
@@ -43,7 +19,10 @@
 					<div class="col-12 text-center">
 						<h2 class="mb-5">
 							<span>List blog</span>
+							<br>
+							<a href="#" type="button" class="btn btn-outline-secondary">+ Add new</a>
 						</h2>
+						
 					</div>
 
 					<div class="col-lg-10 col-12">
