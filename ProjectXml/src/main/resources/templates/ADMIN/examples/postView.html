@@ -1,0 +1,151 @@
+<head	th:replace="fragment :: header_link('Admin - Post Detail')"/>
+	
+<body class="">
+<style>
+	.switch {
+		position: relative;
+		display: inline-block;
+		width: 60px;
+		height: 34px;
+	}
+	
+	.switch input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+	
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ccc;
+		-webkit-transition: .4s;
+		transition: .4s;
+	}
+	
+	.slider:before {
+		position: absolute;
+		content: "";
+		height: 26px;
+		width: 26px;
+		left: 4px;
+		bottom: 4px;
+		background-color: white;
+		-webkit-transition: .4s;
+		transition: .4s;
+	}
+	
+	input:checked+.slider {
+		background-color: #2196F3;
+	}
+	
+	input:focus+.slider {
+		box-shadow: 0 0 1px #2196F3;
+	}
+	
+	input:checked+.slider:before {
+		-webkit-transform: translateX(26px);
+		-ms-transform: translateX(26px);
+		transform: translateX(26px);
+	}
+	
+	/* Rounded sliders */
+	.slider.round {
+		border-radius: 34px;
+	}
+	
+	.slider.round:before {
+		border-radius: 50%;
+	}
+</style>
+	<div class="wrapper ">
+		<div th:replace="navigation :: menu"></div>
+		<div class="main-panel">
+			<div th:replace="navigation :: nav_header"></div>
+			<div class="content">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="card card-user">
+									<div class="row">
+										<div class="col-lg-5 col-md-5 col-sm-6">
+											<div class="white-box text-center">
+												<img th:if="${post.img != null}" th:src="@{${post.img}}" class="img-responsive">
+												<img th:if="${post.img == null}" src="images/original.png" class="img-responsive">
+											</div>
+										</div>
+										<div class="col-lg-7 col-md-7 col-sm-6">
+											<h4 class="box-title mt-5">[[${post.title}]]</h4>
+											<h6 class="box-title mt-5">Author: [[${userName}]]</h6>
+											<p>[[${post.desription}]]</p>
+											<h2 class="mt-5">
+												Date Create: [[${post.datecreate}]]
+											</h2>
+											<ul class="list-unstyled">
+												<li><i class="fa fa-check text-success"></i>Likes: <span th:text="${#lists.size(post.likes)}"/></li>
+												<li><i class="fa fa-check text-success"></i>Status Blog:
+													<select class="form-control ml-2" onchange="updateData(this)" th:typeInput="select" th:id="${post.id}" id="exampleFormControlSelect1" style="width: 15%; display: inline-block;">
+														<option th:each="status : ${statusList}"  th:value="${status.id}" th:utext="${status.name}" th:selected="${post.statusid == status.id}"/>
+													</select>
+												</li>
+												<li><i class="fa fa-check text-success"></i>Is Active: 
+													<label class="switch"> 
+														<input name="isactive" onchange="updateData(this)" th:typeInput="visible" th:id="${post.id}" type="checkbox" th:checked="${post.idisvisible} == Y ? true : false">
+														<span class="slider round"></span>
+													</label>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="mr-1" style="text-align: right;">
+									<a th:href="@{'/selectPostList'}" type="submit" class="btn custom-btn form-control mt-4 mb-3" style="width: 20%; border: 1px solid black;"> Back To List </a>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<footer th:replace="fragment :: footer"></footer>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+function updateData(element){
+	link = $(element);
+	var id = link.attr("id");
+	var typeInput = link.attr("typeInput");
+	
+	var valCheckbox = '';
+	
+	if(typeInput == "select"){
+		valCheckbox = $(element).find('option:selected').val();
+	}else{
+		if($(element).is(':checked')){
+			valCheckbox = 'Y'
+		}else{
+			valCheckbox = 'N'
+		}
+	}
+
+	$.ajax({
+		url: "./updatePostAjax?id=" + id + "&valCheckbox=" + valCheckbox +"&value=" + typeInput,
+		method: 'post',
+		async: false,
+		success: function(data){
+			if(data == "N"){
+				$('#checkbox' + id).prop('checked', false);
+			}else{
+				$('#checkbox' + id).prop('checked', true);
+			}
+		}
+	});
+}
+</script>
+</html>

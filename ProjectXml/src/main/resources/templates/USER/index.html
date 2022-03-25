@@ -1,0 +1,127 @@
+<head th:replace="fragmentU :: headerU_link('User - HomePage')" />
+<body>
+<style>
+.__rowCustom{
+width: 100%; margin-right: 0px !important; margin-left: 0px !important; box-shadow: 6px 6px 18px 4px rgb(0 0 0/ 70%); margin-bottom: 5%; border-radius: 10px;
+}
+.mt-2 .mt-lg-auto a.bi-heart-fill.product-icon{
+	margin-left: 0px !important;
+}
+.__img_custom{
+max-width: 100%;
+height: auto;
+}
+.__img_width{
+	width: auto !important;
+	align-items: center;
+}
+</style>
+	<section class="preloader">
+		<div class="spinner">
+			<span class="sk-inner-circle"></span>
+		</div>
+	</section>
+	<main>
+		<div th:replace="navigationU :: nav_headerU"></div>
+		<section class="slick-slideshow">
+			<div class="slick-custom" th:each="postTrend : ${listPostTrend}">
+				<img th:src="${postTrend.img}"class="__img_custom __img_width" >
+				<div class="slick-bottom">
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-6 col-10">
+								<h1 th:text="${postTrend.title}" class="slick-title">Blog 1</h1>
+								<p th:text="${postTrend.desription}" class="lead text-white mt-lg-3 mb-lg-5">Content blog 1111111</p>
+								<a th:href="@{'/selectPostViewU?id='+ ${postTrend.id}}" href="about.html" class="btn custom-btn">View blog</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="about section-padding">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 text-center">
+						<h2 class="mb-5">
+							<span>List blog</span>
+						</h2>
+					</div>
+					<div class="col-lg-10 col-12">
+						<div class="tab-content mt-2" id="pills-tabContent">
+							<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+								<div class="row __rowCustom" th:each="post : ${listPost}">
+									<div class="col-lg-4 col-12" style="display: flex; align-items: center;">
+										<img th:src="${post.img}" class="__img_custom">
+									</div>
+									<div class="col-lg-8 col-12">
+										<div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
+											<h1 style="font-size: 22px; font-weight: 600;" class="mb-3 "> Author: [[${post.userid}]]</h1>
+											<div class="mb-3 date-create">
+												<p>2022/03/22</p>
+											</div>
+											<h4 class="mb-3" th:text="${post.title}"></h4>
+											<p th:text="${post.desription}" style="padding-bottom: 10px">
+												<br>
+											</p>
+											<div class="mt-2 mt-lg-auto">
+												<a th:if="${#lists.contains(post.likes, userId)}" onclick="updateLike(this)" th:id="${post.id}" style="color: red;" class="bi-heart-fill product-icon" th:type="unlike">
+													<p th:text="${#lists.size(post.likes)}"></p>
+												</a>
+												<a th:if="${!#lists.contains(post.likes, userId)}" onclick="updateLike(this)" th:id="${post.id}" style="color: #EBEBEB" class="bi-heart-fill product-icon" th:type="like">
+													<p th:text="${#lists.size(post.likes)}"></p>
+												</a>
+												<br> 
+												<a th:href="@{'/selectPostViewU?id='+ ${post.id}}" href="product-detail.html" class="custom-link mb-2">
+													View details <i class="bi-arrow-right ms-2"></i>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+	<footer th:replace="fragmentU :: footerU"></footer>
+
+	<!-- JAVASCRIPT FILES -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<script src="js/Headroom.js"></script>
+	<script src="js/jQuery.headroom.js"></script>
+	<script src="js/slick.min.js"></script>
+	<script src="js/custom.js"></script>
+
+	<script type="text/javascript">
+		function updateLike(element) {
+			link = $(element);
+			var id = link.attr("id");
+			var type = link.attr("type");
+
+			var valCheckbox = '';
+			if (type == 'like') {
+				value = 'Y';
+			} else {
+				value = 'N';
+			}
+
+			$.ajax({
+				url : "./updatePostLikeAjax?id=" + id + "&value=" + value,
+				method : 'post',
+				async : false,
+				success : function(data) {
+					if(data != null && data != ''){
+						location.reload();
+					}
+				}
+			});
+		}
+	</script>
+
+</body>
+
+</html>

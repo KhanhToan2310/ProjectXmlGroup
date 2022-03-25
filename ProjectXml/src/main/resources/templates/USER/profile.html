@@ -1,0 +1,144 @@
+<head th:replace="fragmentU :: headerU_link('User - Detail')" />
+
+<body>
+
+    <section class="preloader">
+        <div class="spinner">
+            <span class="sk-inner-circle"></span>
+        </div>
+    </section>
+
+    <main>
+        <div th:replace="navigationU :: nav_headerU"></div>
+
+        <section class="product-detail section-padding">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-12 col-12">
+                        <div class="product-thumb profile-image" style="display: flex;">
+                            <img src="images\profile-image.jpg"
+                                class="img-fluid product-image" alt="">
+                            <div class="icon-like" style="    margin-left: 100px;
+                            display: grid;">
+                                <div class="product-info d-flex">
+                                </div>
+                                <div class="top">
+                                    <a style="" href="#">
+                                        <p>Trương Khánh Toàn</p>
+                                    </a>
+                                    <p>2022/03/22</p>
+                                </div>
+                                <div class="form-floating mb-4 p-0">
+                                    <input type="text" class="form-control" placeholder="Full name" required>
+
+                                    <label for="email">Email address</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-12">
+                    <div class="product-description">
+                    </div>
+
+                </div>
+
+            </div>
+            </div>
+        </section>
+
+        <section class="related-product section-padding border-top">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-12">
+                        <h3 class="mb-5">You might also like</h3>
+                    </div>
+
+                    <div class="col-lg-4 col-12 mb-3">
+                        <div class="product-thumb">
+                            <a href="product-detail.html">
+                                <img src="images/product/evan-mcdougall-qnh1odlqOmk-unsplash.jpeg"
+                                    class="img-fluid product-image" alt="">
+                            </a>
+
+                            <div class="product-top d-flex">
+                                <a href="#" class="bi-heart-fill product-icon"></a>
+                            </div>
+
+                            <div class="product-info d-flex">
+                                <div>
+                                    <h5 class="product-title mb-0">
+                                        <a href="product-detail.html" class="product-title-link">Toàn lol</a>
+                                    </h5>
+                                    <p class="product-p">Đích thị là thằng mặt lol</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer th:replace="fragmentU :: footerU"></footer>
+
+    <!-- CART MODAL -->
+    <div class="modal fade" id="cart-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0">
+                <div class="modal-header flex-column">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-12 mt-4 mt-lg-0">
+                            <img src="images/product/evan-mcdougall-qnh1odlqOmk-unsplash.jpeg"
+                                class="img-fluid product-image" alt="">
+                        </div>
+
+                        <div class="col-lg-6 col-12 mt-3 mt-lg-0">
+                            <h3 class="modal-title" id="exampleModalLabel">Tree pot</h3>
+
+                            <p class="product-price text-muted mt-3">$25</p>
+
+                            <p class="product-p">Quatity: <span class="ms-1">4</span></p>
+
+                            <p class="product-p">Colour: <span class="ms-1">Black</span></p>
+
+                            <p class="product-p pb-3">Size: <span class="ms-1">S/S</span></p>
+
+                            <div class="border-top mt-4 pt-3">
+                                <p class="product-p"><strong>Total: <span class="ms-1">$100</span></strong></p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="row w-50">
+                        <button type="button" class="btn custom-btn cart-btn ms-lg-4">Checkout</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/Headroom.js"></script>
+    <script src="js/jQuery.headroom.js"></script>
+    <script src="js/slick.min.js"></script>
+    <script src="js/custom.js"></script>
+
+</body>
+
+</html>
