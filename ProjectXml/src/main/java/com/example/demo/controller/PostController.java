@@ -79,7 +79,7 @@ public class PostController {
 		post.setDateupdate(dtf.format(localDate));
 		post.setUserid(account.getId());
 		post.setStatusid("1");
-		post.setIsdelete("Y");
+		post.setIsdelete("N");
 		post.setIdisvisible("Y");
 		try {
 			postServiceImpl.updatePosts(post);
