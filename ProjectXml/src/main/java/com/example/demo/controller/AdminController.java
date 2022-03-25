@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLStreamException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -254,6 +255,7 @@ public class AdminController {
      * select Find Account View
      * 
      * @param model
+     * @param HttpServletRequest
      * @return String
      * @throws XMLStreamException
      * @throws UnsupportedEncodingException
@@ -261,10 +263,24 @@ public class AdminController {
      * @throws Exception
      */
     @RequestMapping(value = "/updateAccountView")
-    public String selectFindAccountView(ModelMap model, @RequestParam String id)
+    public String selectFindAccountView(ModelMap model , HttpServletRequest request)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-        Account account = accountService.findAccount(id);
+    	// get username on session
+    			String userNameLog = (String) request.getSession().getAttribute("username");
+
+    			// find id's user by usernameLog
+    			List<Account> ListAccount = accountService.ReadListAccount();
+    			// user id
+    			String userPostedId = "";
+    			for (Account account : ListAccount) {
+    				if (account.getUsername().equalsIgnoreCase(userNameLog)) {
+    					userPostedId = account.getId();
+
+    				}
+    			}
+    	
+        Account account = accountService.findAccount(userPostedId);
         Map<String, String> selectRoleMap = selectRoleMap();
 
         model.addAttribute("selectRoleMap", selectRoleMap);
