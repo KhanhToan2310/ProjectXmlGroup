@@ -3,13 +3,11 @@ package com.example.demo.controller;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.JOptionPane;
@@ -28,9 +26,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.Account;
 import com.example.demo.model.Post;
-import com.example.demo.model.Role;
+import com.example.demo.model.Result;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.PostService;
+import com.example.demo.util.AccessUtil;
 import com.example.demo.service.RoleService;
 import com.example.demo.util.DateUtil;
 
@@ -47,19 +46,26 @@ public class UserController {
 	private RoleService roleService;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String checkLoginSession(HttpServletRequest request, @ModelAttribute("account") Account account)
+	public String checkLoginSessionUser(HttpServletRequest request, @ModelAttribute("account") Account account, ModelMap model)
 			throws Exception {
+//		Result result = AccessUtil.accessPage(request,"3");
+//		if (result.isValid()) {
+//			return "USER/index";
+//		}
+//		return result.getPath();
+		model.addAttribute("message", "");
 		String username = (String) request.getSession().getAttribute("username");
+		System.out.println("aaaaaaaaaa " + username);
 		if (username != null) {
 			List<Account> listAccount = accountService.ReadListAccount();
 			for (Account a : listAccount) {
 				if (username.equals(a.getUsername())) {
 					if (a.getRole() == "1")
-						return "ADMIN/tablesAccounts";
+						return "redirect:/selectAccountList";
 					else if (a.getRole() == "2")
-						return "ADMIN/postList";
+						return "redirect:/selectPostList";
 					else
-						return "USER/index";
+						return "redirect:/selectPostListU";
 				}
 			}
 		}
@@ -67,26 +73,37 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String loginAccount(HttpServletRequest request, @ModelAttribute("account") Account account, ModelMap model)
-			throws Exception {
+	public String loginAccountUser(HttpServletRequest request, @ModelAttribute("account") Account account,
+			ModelMap model) throws Exception {
+//		Result result = AccessUtil.login(request, account.getUsername(), account.getPassword());
+//		if (result.isValid())
+//			return result.getPath();
+//		else
+//			model.addAttribute("message", "Username or password incorrect. Please input again !");
+//		return "USER/sign-in";
 		for (Account a : accountService.ReadListAccount()) {
-			if (a.getUsername().equalsIgnoreCase(account.getUsername().trim())
-					&& a.getPassword().equalsIgnoreCase(account.getPassword().trim())) {
-				request.getSession().setAttribute("username", account.getUsername().trim());
+			if(a.getUsername().equalsIgnoreCase(account.getUsername()) && a.getPassword().equalsIgnoreCase(account.getPassword()) ) {
+				request.getSession().setAttribute("username", account.getUsername());
 				if (a.getRole() == "1")
-					return "ADMIN/tablesAccounts";
+					return "redirect:/selectAccountList";
 				else if (a.getRole() == "2")
-					return "ADMIN/postList";
+					return "redirect:/selectPostList";
 				else
 					return "redirect:/selectPostListU";
 			} else {
 				model.addAttribute("message", "Username or password incorrect. Please input again !");
 			}
 		}
-
-		return "USER/sign-in";
+		return "redirect:/login";
 	}
 	
+	@RequestMapping(value = "/logout")
+	public String logoutUser(HttpServletRequest request, @ModelAttribute("account") Account account,
+			ModelMap model) throws Exception {
+		request.getSession().removeAttribute("username");
+		System.out.println("aaaaaa " + request.getSession().getAttribute("username"));
+		return "redirect:/login";
+			}
 	/**
 	 * register
 	 * 
@@ -136,6 +153,7 @@ public class UserController {
 				listPostSave.add(post);
 			}
 		}
+	
 
 		String userNameLog = (String) request.getSession().getAttribute("username");
 
@@ -182,12 +200,13 @@ public class UserController {
 		} else {
 			listPostTrend = _listpost;
 		}
-
+		
 		model.addAttribute("userPostedId", userPostedId);
 		model.addAttribute("listPostTrend", listPostTrend);
 
 		return "USER/index";
 	}
+
 
 	/**
 	 * sort array funtion
