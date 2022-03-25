@@ -33,7 +33,7 @@ public class PostController {
 
 	@RequestMapping(value = "/create-post", method = RequestMethod.GET)
 	public String getCreatePostPage(@ModelAttribute("post") Post post) {
-			return "USER/post-edit-create";
+			return "USER/post-create";
 	}
 
 	@RequestMapping(value = "/edit-post", method = RequestMethod.GET)
@@ -43,7 +43,7 @@ public class PostController {
 		for (Post p : postService.readListPost()) {
 			if (p.getId().equalsIgnoreCase(id.trim()) && post.getUserid().equalsIgnoreCase(account.getId())) {
 				model.addAttribute("post", p);
-				return "USER/post-edit-create";
+				return "USER/post-edit";
 			}
 		}
 		return "redirect:/selectPostListU";
@@ -59,34 +59,27 @@ public class PostController {
 		post.setDateupdate(dtf.format(localDate));
 		post.setUserid(account.getId());
 		post.setStatusid("1");
-		post.setIsdelete("Y");
+		post.setIsdelete("N");
 		post.setIdisvisible("Y");
 		try {
 			postServiceImpl.addNewPosts(post);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		return "redirect:/selectPostListU";
+		return "redirect:/selectPostViewOfU";
 	}
 	
 	@RequestMapping(value = "/updatePost", method = RequestMethod.POST)
-	public String updatePost(HttpServletRequest request, @ModelAttribute("post") Post post) throws Exception {
+	public String updatePost(HttpServletRequest request, @ModelAttribute("post") Post post, @RequestParam String id) throws Exception {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
 		LocalDate localDate = LocalDate.now();
-		Account account = (Account) request.getSession().getAttribute("account");
-	
-		post.setDatecreate(dtf.format(localDate));
 		post.setDateupdate(dtf.format(localDate));
-		post.setUserid(account.getId());
-		post.setStatusid("1");
-		post.setIsdelete("N");
-		post.setIdisvisible("Y");
 		try {
 			postServiceImpl.updatePosts(post);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		return "redirect:/selectPostListU";
+		return "redirect:/selectPostViewOfU";
 	}
 	
 }

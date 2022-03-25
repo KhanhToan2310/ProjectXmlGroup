@@ -264,7 +264,7 @@ public class UserController {
 		sortArray(list);
 
 		// get username on session
-		String userNameLog = (String) request.getSession().getAttribute("username");
+		String userNameLog = (String) request.getSession().getAttribute("");
 
 		// find id's user by usernameLog
 		List<Account> ListAccount = accountService.ReadListAccount();
