@@ -82,73 +82,44 @@ https://www.tooplate.com/view/2127-little-fashion
 
 		<section class="product-detail section-padding">
 			<div class="container">
+				<h1>Create post</h1>
 				<div class="row">
 
-					<form th:action="@{/registerPost}" th:object="${post}" method="post"
-						role="form">
+					<form th:action="@{/registerPost}" th:object="${post}"
+						method="POST" role="form" id="formPost">
 
 						<div class="form-floating mb-4 p-0">
-							<input th:field="*{title}" type="text" name="title"
-								id="username" class="form-control" placeholder="Title"
-								required> <label for="email">Title</label>
+							<input th:field="*{title}" type="text" name="title" id="title"
+								class="form-control" placeholder="Title" required> <label
+								for="title">Title</label>
 						</div>
 
 						<div class="form-floating p-0">
-							<input th:field="*{img}" type="text" name="img"
-								class="form-control" placeholder="URL image"
-								required> <label for="password">Image</label>
+							<input th:field="*{img}" type="text" name="image"
+								class="form-control" placeholder="URL image" required
+								style="margin-bottom: 20px;"> <label for="image">Image</label>
 						</div>
-						
+
 						<div class="form-floating p-0">
-							<input th:field="*{img}" type="text" name="img"
-								class="form-control" placeholder="URL image"
-								required> <label for="password">Description</label>
+							<textarea rows="20" cols="80" th:field="*{desription}"
+								name="description" class="form-control" style="height: 200px;"
+								placeholder="Description" required form="formPost"> </textarea>
+							<label for="description">Description</label>
+
 						</div>
-
-						<button type="submit"
-							class="btn custom-btn form-control mt-4 mb-3">Create post</button>
-
+						<div class="form-floating p-0"
+							style="display: flex; width: 23%; justify-content: space-between; align-items: baseline;">
+							<button type="submit"
+								class="btn custom-btn form-control mt-4 mb-3"
+								style="width: fit-content; background: cadetblue; align-items: center; padding: 0px 15px;">Create
+								post</button>
+							<a href="/login"
+								style="display: flex; align-items: center; font-size: 20px; text-decoration: underline;">Back
+								</button>
+						</div>
 					</form>
-					
-					<div class="col-lg-12 col-12">
-						<div class="product-thumb" style="display: flex;">
-							<img
-								src="images/product/evan-mcdougall-qnh1odlqOmk-unsplash.jpeg"
-								class="img-fluid product-image" alt="">
-							<div class="icon-like" style="margin-left: 100px; display: grid;">
-								<div class="product-info d-flex">
-									<div>
-										<h2 th:text="${post.title}" class="product-title mb-0">Toàn
-											mặt lol</h2>
-									</div>
-								</div>
-								<div class="top">
-									<a style="" href="#">
-										<p th:text="${post.userid}">Trương Khánh Toàn</p>
-									</a>
-									<p th:text="${post.datecreate}">2022/03/22</p>
-								</div>
-
-								<div class="bottom">
-									<a style="" href="#" class="bi-heart-fill product-icon ms-auto">
-										<p th:text="${#lists.size(post.likes)}">2000</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-lg-12 col-12">
-
-					<div class="product-description">
-
-						<p th:text="${post.desription}" class="lead mb-5"></p>
-					</div>
 
 				</div>
-
-			</div>
 			</div>
 		</section>
 
