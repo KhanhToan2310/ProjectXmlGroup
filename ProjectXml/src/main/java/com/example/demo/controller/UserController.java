@@ -396,10 +396,6 @@ public class UserController {
 		return "redirect:/selectPostListU";
 	}
 	
-    @RequestMapping("/selectUserProfile")
-    public String selectUserProfile() {
-        return "USER/profile";
-    }
 	
 	/**
      * update Account  User
@@ -526,7 +522,6 @@ public class UserController {
         
         return null;
     }
-	
 	
 	/**
      * select Role Map
