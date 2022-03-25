@@ -52,13 +52,13 @@ public class UserController {
 			throws Exception {
 		model.addAttribute("message", "");
 		Account acc = (Account) request.getSession().getAttribute("account");
-		if (acc.getUsername() != null) {
+		if (acc != null) {
 			List<Account> listAccount = accountService.ReadListAccount();
 			for (Account a : listAccount) {
 				if (acc.getUsername().equals(a.getUsername())) {
-					if (a.getRole() == "1")
+					if ("1".equalsIgnoreCase(a.getRole()))
 						return "redirect:/selectAccountList";
-					else if (a.getRole() == "2")
+					else if ("2".equalsIgnoreCase(a.getRole()))
 						return "redirect:/selectPostList";
 					else
 						return "redirect:/selectPostListU";
@@ -73,10 +73,10 @@ public class UserController {
 			ModelMap model) throws Exception {
 		for (Account a : accountService.ReadListAccount()) {
 			if(a.getUsername().equalsIgnoreCase(account.getUsername()) && a.getPassword().equalsIgnoreCase(account.getPassword()) ) {
-				request.getSession().setAttribute("account", account);
-				if (a.getRole() == "1")
+				request.getSession().setAttribute("account", a);
+				if ("1".equalsIgnoreCase(a.getRole()))
 					return "redirect:/selectAccountList";
-				else if (a.getRole() == "2")
+				else if ("2".equalsIgnoreCase(a.getRole()))
 					return "redirect:/selectPostList";
 				else
 					return "redirect:/selectPostListU";
