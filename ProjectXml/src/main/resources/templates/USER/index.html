@@ -58,7 +58,7 @@ height: auto;
 										<div class="d-flex flex-column h-100 ms-lg-4 mt-lg-0 mt-5">
 											<h1 style="font-size: 22px; font-weight: 600;" class="mb-3 "> Author: [[${post.userid}]]</h1>
 											<div class="mb-3 date-create">
-												<p>2022/03/22</p>
+												<p th:text="${post.datecreate}"></p>
 											</div>
 											<h4 class="mb-3" th:text="${post.title}"></h4>
 											<p th:text="${post.desription}" style="padding-bottom: 10px">

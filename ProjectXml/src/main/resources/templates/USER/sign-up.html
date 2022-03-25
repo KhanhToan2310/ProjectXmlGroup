@@ -7,7 +7,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Tooplate's Little Fashion - Sign Up Page</title>
+<title>Sign up</title>
 
 <!-- CSS FILES -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,7 +64,7 @@ https://www.tooplate.com/view/2127-little-fashion
 									<div class="form-floating">
 										<input type="text" name="username" id="username"
 											pattern="[a-zA-Z]{6,10}" class="form-control"
-											placeholder="User name" required="required">
+											placeholder="User name" required>
 										<p class="text-center">* shall include a-z A-Z in 6 to 10
 											characters</p>
 
@@ -74,7 +74,7 @@ https://www.tooplate.com/view/2127-little-fashion
 									<div class="form-floating my-4">
 										<input type="text" name="fullname" id="fullname"
 											pattern="[a-zA-Z]{6,20}" class="form-control"
-											placeholder="Full name" required="required"> <label
+											placeholder="Full name" required> <label
 											for="fullname">Full name</label>
 										<p class="text-center">* shall include a-z A-Z in 6 to 10
 											characters</p>
@@ -83,7 +83,7 @@ https://www.tooplate.com/view/2127-little-fashion
 									<div class="form-floating my-4">
 										<input type="password" name="password" id="password"
 											pattern="[0-9a-zA-Z]{4,10}" class="form-control"
-											placeholder="Password" required="required"> <label
+											placeholder="Password" required> <label
 											for="password">Password</label>
 
 										<p class="text-center">* shall include 0-9 a-z A-Z in 4 to
@@ -93,7 +93,7 @@ https://www.tooplate.com/view/2127-little-fashion
 									<div class="form-floating">
 										<input type="password" name="confirm_password"
 											id="confirm_password" pattern="[0-9a-zA-Z]{4,10}"
-											class="form-control" placeholder="Password" required="required">
+											class="form-control" placeholder="Password" required>
 
 										<label for="confirm_password">Password Confirmation</label>
 									</div>
@@ -216,7 +216,7 @@ https://www.tooplate.com/view/2127-little-fashion
 	<script src="js/slick.min.js"></script>
 	<script src="js/custom.js"></script>
 
-	<script type="text/javascript">
+	<script type="text/javascript" th:inline="javascript">
 		function submitform() {
 			var username = $("#username").val();
 			var phone = $("#phone").val();
@@ -227,29 +227,59 @@ https://www.tooplate.com/view/2127-little-fashion
 			var password = $("#password").val();
 			var confirm_password = $("#confirm_password").val();
 			
-			if(confirm_password == password){
+			var list = [];
+			
+			list = [[${accounts}]];
+				
+			
+			
+			var flag = false;
+			for( var i = 0; i < list.length ; i++ ){
+				var item = list[i];
+				if(item == username){
+					flag = false;
+					
+					break;
+				}else{
+					flag = true;
+				}
+			}
+			
+			if(flag == true){
+				
 				if(password != null && fullname != '' && birthday != '' && age != '' && email != '' && phone != ''  && username != '' && confirm_password != '' && confirm_password == password){
-					$.ajax({
-						url : "./registered?username=" + username 
-								+ "&phone=" + phone 
-								+ "&email=" + email 
-								+ "&age=" + age 
-								+ "&birthday=" + birthday 
-								+ "&password=" + password 
-								+ "&fullname=" + fullname,
-						method : 'post',
-						async : false,
-						success : function(data) {
-							event.preventDefault();
-							alert("Register success!");
-						}
-					});
+					
+					if(confirm_password == password){
+						
+						$.ajax({
+							url : "./registered?username=" + username 
+									+ "&phone=" + phone 
+									+ "&email=" + email 
+									+ "&age=" + age 
+									+ "&birthday=" + birthday 
+									+ "&password=" + password 
+									+ "&fullname=" + fullname,
+							method : 'post',
+							async : false,
+							success : function(data) {
+								location.href="login";
+								
+								alert("Register success!");
+							}
+						});
+						
+					}else{
+						alert("confirm password don't same!");
+					}
+					
 				}else{
 					alert("Something Error!");
 				}
+				
 			}else{
-				alert("confirm password don't same!");
+				alert("usename is exist!");
 			}
+			
 			
 			
 			
