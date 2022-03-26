@@ -25,7 +25,6 @@ import com.example.demo.service.AccountService;
 import com.example.demo.service.PostService;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.StatusService;
-import com.example.demo.util.DateUtil;
 
 @Controller
 public class AdminController {
@@ -230,13 +229,19 @@ public class AdminController {
             if (id.equals(account.getId())) {
                 temp = account;
 
-                if ("delete".equals(value)) {
+                switch (value) {
+                case "delete":
                     temp.setIsdelete(valCheckbox);
-                } else {
-                    temp.setIsactive(valCheckbox);
-                }
-                if ("role".equals(value)) {
+                    break;
+                case "role":
                     temp.setRole(valCheckbox);
+                    break;
+                case "active":
+                    temp.setIsactive(valCheckbox);
+                    break;
+
+                default:
+                    break;
                 }
 
                 accountService.UpdateUser(temp);
@@ -259,17 +264,15 @@ public class AdminController {
      * @throws Exception
      */
     @RequestMapping(value = "/updateAccountView")
-    public String selectFindAccountView(ModelMap model , HttpServletRequest request)
+    public String selectFindAccountView(ModelMap model, HttpServletRequest request)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-    	// get username on session
-    	Account acc = (Account) request.getSession().getAttribute("account");
+        // get username on session
+        Account acc = (Account) request.getSession().getAttribute("account");
 
-    			
-    			// user id
-    			String userPostedId = acc.getId();
-    			
-    	
+        // user id
+        String userPostedId = acc.getId();
+
         Account account = accountService.findAccount(userPostedId);
         Map<String, String> selectRoleMap = selectRoleMap();
 
@@ -344,7 +347,7 @@ public class AdminController {
 
         return null;
     }
-    
+
     /**
      * delete Form View
      * 
@@ -357,14 +360,11 @@ public class AdminController {
      * @throws Exception
      */
     @RequestMapping(value = "/deleteFormView")
-    public String deleteFormView()
-            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+    public String deleteFormView() throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-    	
-    	
         return "ADMIN/examples/deleteForm";
     }
-    
+
     /**
      * delete Action
      * 
@@ -378,15 +378,13 @@ public class AdminController {
      */
     @ResponseBody
     @RequestMapping(value = "/deleteAction")
-    public String deleteAction()
-            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+    public String deleteAction() throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
-    	accountService.DeleteUser();
-    	postService.deletePosts();
+        accountService.DeleteUser();
+        postService.deletePosts();
 
         return "ok";
     }
-    
 
     /**
      * select Role Map

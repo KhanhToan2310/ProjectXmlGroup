@@ -38,83 +38,85 @@ import com.example.demo.util.DateUtil;
 @Controller
 public class UserController {
 
-	@Autowired
-	private AccountService accountService;
+    @Autowired
+    private AccountService accountService;
 
-	@Autowired
-	private PostService postService;
+    @Autowired
+    private PostService postService;
 
-	@Autowired
-	private RoleService roleService;
-	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String checkLoginSessionUser(HttpServletRequest request, @ModelAttribute("account") Account account, ModelMap model)
-			throws Exception {
-		model.addAttribute("message", "");
-		Account acc = (Account) request.getSession().getAttribute("account");
-		if (acc != null) {
-			List<Account> listAccount = accountService.ReadListAccount();
-			for (Account a : listAccount) {
-				if (acc.getUsername().equals(a.getUsername())) {
-					if ("1".equalsIgnoreCase(a.getRole()))
-						return "redirect:/selectAccountList";
-					else if ("2".equalsIgnoreCase(a.getRole()))
-						return "redirect:/selectPostList";
-					else
-						return "redirect:/selectPostListU";
-				}
-			}
-		}
-		return "USER/sign-in";
-	}
+    @Autowired
+    private RoleService roleService;
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String loginAccountUser(HttpServletRequest request, @ModelAttribute("account") Account account,
-			ModelMap model) throws Exception {
-		for (Account a : accountService.ReadListAccount()) {
-			if(a.getUsername().equalsIgnoreCase(account.getUsername()) && a.getPassword().equalsIgnoreCase(account.getPassword()) ) {
-				request.getSession().setAttribute("account", a);
-				if ("1".equalsIgnoreCase(a.getRole()))
-					return "redirect:/selectAccountList";
-				else if ("2".equalsIgnoreCase(a.getRole()))
-					return "redirect:/selectPostList";
-				else
-					return "redirect:/selectPostListU";
-			} else {
-				model.addAttribute("message", "Username or password incorrect. Please input again !");
-			}
-		}
-		return "redirect:/login";
-	}
-	
-	@RequestMapping(value = "/logout")
-	public String logoutUser(HttpServletRequest request, @ModelAttribute("account") Account account,
-			ModelMap model) throws Exception {
-		request.getSession().removeAttribute("account");
-		return "redirect:/login";
-			}
-	/**
-	 * register
-	 * 
-	 * @param model
-	 * @param HttpServletRequest
-	 * @return String
-	 * @throws Exception
-	 */
-	@RequestMapping("/register")
-	public String addAccount(ModelMap model)
-			throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String checkLoginSessionUser(HttpServletRequest request, @ModelAttribute("account") Account account,
+            ModelMap model) throws Exception {
+        model.addAttribute("message", "");
+        Account acc = (Account) request.getSession().getAttribute("account");
+        if (acc != null) {
+            List<Account> listAccount = accountService.ReadListAccount();
+            for (Account a : listAccount) {
+                if (acc.getUsername().equals(a.getUsername())) {
+                    if ("1".equalsIgnoreCase(a.getRole()))
+                        return "redirect:/selectAccountList";
+                    else if ("2".equalsIgnoreCase(a.getRole()))
+                        return "redirect:/selectPostList";
+                    else
+                        return "redirect:/selectPostListU";
+                }
+            }
+        }
+        return "USER/sign-in";
+    }
 
-		List<Account> list = accountService.ReadListAccount();
-		List<String> usernameSave = new ArrayList<String>();
-		for (Account account : list) {
-			usernameSave.add(account.getUsername());
-		}
-		
-		model.addAttribute("accounts",usernameSave);
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String loginAccountUser(HttpServletRequest request, @ModelAttribute("account") Account account,
+            ModelMap model) throws Exception {
+        for (Account a : accountService.ReadListAccount()) {
+            if (a.getUsername().equalsIgnoreCase(account.getUsername())
+                    && a.getPassword().equalsIgnoreCase(account.getPassword())) {
+                request.getSession().setAttribute("account", a);
+                if ("1".equalsIgnoreCase(a.getRole()))
+                    return "redirect:/selectAccountList";
+                else if ("2".equalsIgnoreCase(a.getRole()))
+                    return "redirect:/selectPostList";
+                else
+                    return "redirect:/selectPostListU";
+            } else {
+                model.addAttribute("message", "Username or password incorrect. Please input again !");
+            }
+        }
+        return "redirect:/login";
+    }
 
-		return "USER/sign-up";
-	}
+    @RequestMapping(value = "/logout")
+    public String logoutUser(HttpServletRequest request, @ModelAttribute("account") Account account, ModelMap model)
+            throws Exception {
+        request.getSession().removeAttribute("account");
+        return "redirect:/login";
+    }
+
+    /**
+     * register
+     * 
+     * @param model
+     * @param HttpServletRequest
+     * @return String
+     * @throws Exception
+     */
+    @RequestMapping("/register")
+    public String addAccount(ModelMap model)
+            throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
+
+        List<Account> list = accountService.ReadListAccount();
+        List<String> usernameSave = new ArrayList<String>();
+        for (Account account : list) {
+            usernameSave.add(account.getUsername());
+        }
+
+        model.addAttribute("accounts", usernameSave);
+
+        return "USER/sign-up";
+    }
 
     /**
      * select Post List User
@@ -255,7 +257,6 @@ public class UserController {
         List<Account> ListAccount = accountService.ReadListAccount();
         // user id
         String userPostedId = acc.getId();
-        
 
         // get posts have condition
         for (Post post : list) {
@@ -307,13 +308,10 @@ public class UserController {
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
         // get username on session
-    	Account acc = (Account) request.getSession().getAttribute("account");
+        Account acc = (Account) request.getSession().getAttribute("account");
 
-        // find id's user by usernameLog
-        List<Account> ListAccount = accountService.ReadListAccount();
         // user id
         String userPostedId = acc.getId();
-        
 
         Account account = accountService.findAccount(userPostedId);
         Map<String, String> selectRoleMap = selectRoleMap();
@@ -427,7 +425,7 @@ public class UserController {
 
         return "USER/accountForm";
     }
-    
+
     /**
      * register
      * 
@@ -445,8 +443,8 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/registered")
     public String registertd(@RequestParam String username, @RequestParam String phone, @RequestParam String email,
-            @RequestParam String age, @RequestParam String birthday, @RequestParam String password, RedirectAttributes redirAttrs,
-            @RequestParam(name = "fullname", required = false) String fullname)
+            @RequestParam String age, @RequestParam String birthday, @RequestParam String password,
+            RedirectAttributes redirAttrs, @RequestParam(name = "fullname", required = false) String fullname)
             throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 
         List<Account> resultList = accountService.ReadListAccount();
@@ -455,14 +453,14 @@ public class UserController {
 
         for (Account account : resultList) {
             if (account.getUsername().equalsIgnoreCase(username)) {
-            	flag = false;
-            	break;
-            }else {
-            	flag = true;
-			}
-            
+                flag = false;
+                break;
+            } else {
+                flag = true;
+            }
+
         }
-        
+
         if (flag == true) {
             a.setUsername(username);
             a.setPassword(password);
@@ -476,14 +474,13 @@ public class UserController {
             a.setIsdelete("N");
 
             accountService.AddNewUser(a);
-            
-		}
-        
+
+        }
+
         return null;
     }
-	
-	
-	/**
+
+    /**
      * select Role Map
      * 
      * @return Map<String, String>

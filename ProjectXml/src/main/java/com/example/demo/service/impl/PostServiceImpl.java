@@ -160,45 +160,25 @@ public class PostServiceImpl implements PostService {
         for (Post post : _listPort) {
 
             if (post.getId().equalsIgnoreCase(_post.getId())) {
-                if (!_post.getTitle().isEmpty()) {
-                    post.setTitle(_post.getTitle());
-                }
+                post.setTitle(_post.getTitle());
 
-                if (!_post.getDesription().isEmpty()) {
-                    post.setDesription(_post.getDesription());
-                }
+                post.setDesription(_post.getDesription());
 
-                if (!_post.getImg().isEmpty()) {
-                    post.setImg(_post.getImg());
-                }
+                post.setImg(_post.getImg());
 
-                if (!_post.getDatecreate().isEmpty()) {
-                    post.setDatecreate(_post.getDatecreate());
-                }
+                post.setDatecreate(_post.getDatecreate());
 
-                if (!_post.getDateupdate().isEmpty()) {
-                    post.setDateupdate(_post.getDateupdate());
-                }
+                post.setDateupdate(_post.getDateupdate());
 
-                if (!_post.getUserid().isEmpty()) {
-                    post.setUserid(_post.getUserid());
-                }
+                post.setUserid(_post.getUserid());
 
-                if (!_post.getStatusid().isEmpty()) {
-                    post.setStatusid(_post.getStatusid());
-                }
+                post.setStatusid(_post.getStatusid());
 
-                if (!_post.getIsdelete().isEmpty()) {
-                    post.setIsdelete(_post.getIsdelete());
-                }
+                post.setIsdelete(_post.getIsdelete());
 
-                if (!_post.getIdisvisible().isEmpty()) {
-                    post.setIdisvisible(_post.getIdisvisible());
-                }
+                post.setIdisvisible(_post.getIdisvisible());
 
-                if (!_post.getLikes().isEmpty()) {
-                    post.setLikes(_post.getLikes());
-                }
+                post.setLikes(_post.getLikes());
             }
 
         }
