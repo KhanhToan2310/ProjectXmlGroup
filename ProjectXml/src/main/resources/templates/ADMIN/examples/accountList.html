@@ -94,19 +94,19 @@ input:checked+.slider:before {
 												<td th:text="${acc.email}"></td>
 												<td th:text="${acc.phone}"></td>
 												<td>
-													<select class="form-control" style="width: 70%" name="roleacc">
-														<option th:each="role : ${listRole}" th:utext="${role.name}" th:selected="${role.id == acc.role}" onchange="updateData(this)" th:value="role" th:id="${acc.id}" selected="selected" th:type="select" />
+													<select class="form-control" onchange="updateData(this)" th:id="${acc.id}" th:typeInput="role" th:type="select"  style="width: 70%" name="roleacc">
+														<option th:each="role : ${listRole}" th:value="${role.id}" th:utext="${role.name}" th:selected="${role.id == acc.role}"/>
 													</select>
 												</td>
 												<td>
 													<label class="switch"> 
-														<input name="isdelete" onchange="updateData(this)" th:value="delete" th:id="${acc.id}" th:type="checkbox" th:checked="${acc.isdelete} == Y ? true : false">
+														<input name="isdelete" onchange="updateData(this)" th:typeInput="delete" th:id="${acc.id}" th:type="checkbox" th:checked="${acc.isdelete} == Y ? true : false">
 														<span class="slider round"></span>
 													</label>
 												</td>
 												<td>
 													<label class="switch"> 
-														<input name="isactive" onchange="updateData(this)" th:value="active" th:id="${acc.id}"  th:type="checkbox" th:checked="${acc.isactive} == Y ? true : false">
+														<input name="isactive" onchange="updateData(this)" th:typeInput="active" th:id="${acc.id}"  th:type="checkbox" th:checked="${acc.isactive} == Y ? true : false">
 														<span class="slider round"></span>
 													</label>
 												</td>
@@ -133,14 +133,12 @@ input:checked+.slider:before {
 	function updateData(element) {
 		link = $(element);
 		var id = link.attr("id");
-		var value = link.attr("value");
+		var value = link.attr("typeInput");
 		var type = link.attr("type");
 		
 		var valCheckbox = '';
 		if(type == 'select'){
-			if ($(element).is(':selected')) {
-				valCheckbox = $(element).val()
-			}
+			valCheckbox = $(element).find('option:selected').val();
 		}else{
 			if ($(element).is(':checked')) {
 				valCheckbox = 'Y'

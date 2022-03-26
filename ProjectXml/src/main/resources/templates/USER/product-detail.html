@@ -21,7 +21,11 @@
 								</div>
 								<div class="top">
 									<p th:text="${post.userid}" ></p>
-									<!-- <p th:text="${post.datecreate}"></p> -->
+									<p> Date Create:
+										<span th:text="${#strings.substring(post.datecreate,0,4)}"></span>/
+										<span th:text="${#strings.substring(post.datecreate,4,6)}"></span>/
+										<span th:text="${#strings.substring(post.datecreate,6,8)}"></span>
+									</p>
 									<a th:if="${#lists.contains(post.likes, userId)}" onclick="updateLike(this)" th:id="${post.id}" style="color: red;" class="bi-heart-fill product-icon" th:type="unlike">
 										<p th:text="${#lists.size(post.likes)}"></p>
 									</a>
